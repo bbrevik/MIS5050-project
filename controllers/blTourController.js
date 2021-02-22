@@ -33,8 +33,8 @@ exports.getAllBLTours = async (request, response) => {
     // })
     // This is mongooses way of building queries
     // const allBLTours = await BLTour.find()
-    //   .where('duration')
-    //   .equals(3)
+    //   .where('name')
+    //   .equals(value)
     //   .where('difficulty')
     //   .equals('medium');
 
