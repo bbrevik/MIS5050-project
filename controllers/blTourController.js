@@ -1,3 +1,5 @@
+'use-strict';
+
 /**
  *
  * CRUD operations with mongoose

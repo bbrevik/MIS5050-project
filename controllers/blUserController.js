@@ -1,3 +1,5 @@
+'use-strict';
+
 exports.getBLTUsers = (request, response) => {
   response.json({
     status: 'error',

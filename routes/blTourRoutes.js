@@ -1,3 +1,5 @@
+'use-strict';
+
 /**
  *  This file contains all the routing for our TOUR Routes
  *  we call the express router function and set our router points

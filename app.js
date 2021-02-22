@@ -1,3 +1,5 @@
+'use-strict';
+
 /**
  * Modules required in for the application
  * Express-

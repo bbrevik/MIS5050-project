@@ -1,3 +1,5 @@
+'use-strict';
+
 /**
  * Mongoose-
  * is a object data modeling library for node.js and mongoDB
