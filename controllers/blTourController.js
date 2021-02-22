@@ -8,7 +8,36 @@ const BLTour = require('../models/blTourModel');
 
 exports.getAllBLTours = async (request, response) => {
   try {
-    const allBLTours = await BLTour.find();
+    // {filtering} Here is where we need to build the query
+    const queryObject = { ...request.query }; // get a copy/ new object of the request.query object
+    const fieldsToExclude = ['page', 'sort', 'limit', 'fields']; // these are the fields we need to exclude
+    fieldsToExclude.forEach((item) => delete queryObject[item]); // removing all the fields from the object looping over if it exist
+    console.log(request.query);
+    console.log(queryObject);
+
+    // {better filtering} gte, gt, let, lt need to be handled
+    let toursString = JSON.stringify(queryObject);
+    toursString = toursString.replace(
+      /\b(gte|lte|gt|lt)\b/g,
+      (matchedValue) => `$${matchedValue}`
+    );
+    console.log(JSON.parse(toursString));
+    const builtQuery = BLTour.find(JSON.parse(toursString));
+
+    // This is where the query is executed
+    const allBLTours = await builtQuery;
+    // This is a simple way to build a query
+    // const allBLTours = await BLTour.find({
+    //   duration: 5,
+    //   difficulty: 'hard',
+    // })
+    // This is mongooses way of building queries
+    // const allBLTours = await BLTour.find()
+    //   .where('duration')
+    //   .equals(3)
+    //   .where('difficulty')
+    //   .equals('medium');
+
     response.json({
       status: 'success',
       results: allBLTours.length,
