@@ -1,13 +1,13 @@
 {
   "name": "bucket-list-tours",
   "version": "1.0.0",
-  "description": "\"BucketListTours\"",
+  "description": "We are the The 3 Amigos: \"BucketListTours is an application where people can book tours\"",
   "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "set NODE_ENV=production&& nodemon server.js"
   },
-  "author": "Wolfgang Brevik",
+  "author": "Erin Smith and Wolfgang Brevik",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
