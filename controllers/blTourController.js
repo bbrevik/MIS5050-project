@@ -7,48 +7,50 @@
  */
 
 const BLTour = require('../models/blTourModel');
+const APIProperties = require('../utilities/apiProperties');
+
+exports.bltTopTours = async (request, response, next) => {
+  request.query.limit = '5';
+  request.query.sort = '-tourRatingAverage, price';
+  request.query.fields =
+    'name, price, tourRatingAverage, tourSummary, difficulty';
+  next();
+};
 
 exports.getAllBLTours = async (request, response) => {
+  // This is a simple way to build a query
+  // const allBLTours = await BLTour.find({
+  //   duration: 5,
+  //   difficulty: 'hard',
+  // })
+  // This is mongooses way of building queries
+  // const allBLTours = await BLTour.find()
+  //   .where('name')
+  //   .equals(value)
+  //   .where('difficulty')
+  //   .equals('medium');
   try {
-    // {filtering} Here is where we need to build the query
-    const queryObject = { ...request.query }; // get a copy/ new object of the request.query object
-    const fieldsToExclude = ['page', 'sort', 'limit', 'fields']; // these are the fields we need to exclude
-    fieldsToExclude.forEach((item) => delete queryObject[item]); // removing all the fields from the object looping over if it exist
-    console.log(request.query);
-    console.log(queryObject);
+    // Going to create a new object using mongooses building queries and then return in from the api properties class
+    const bltProperty = new APIProperties(BLTour.find(), request.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
 
-    // {better filtering} gte, gt, let, lt need to be handled
-    let toursString = JSON.stringify(queryObject);
-    toursString = toursString.replace(
-      /\b(gte|lte|gt|lt)\b/g,
-      (matchedValue) => `$${matchedValue}`
-    );
-    console.log(JSON.parse(toursString));
-    const builtQuery = BLTour.find(JSON.parse(toursString));
-
-    // This is where the query is executed
-    const allBLTours = await builtQuery;
-    // This is a simple way to build a query
-    // const allBLTours = await BLTour.find({
-    //   duration: 5,
-    //   difficulty: 'hard',
-    // })
-    // This is mongooses way of building queries
-    // const allBLTours = await BLTour.find()
-    //   .where('name')
-    //   .equals(value)
-    //   .where('difficulty')
-    //   .equals('medium');
-
-    response.json({
+    // allBLTours will wait until the property is built then pass it to the variable allBLTours
+    const allBLTours = await bltProperty.bltQuery;
+    response.status(200).json({
       status: 'success',
       results: allBLTours.length,
       data: {
         tours: allBLTours,
       },
     });
-  } catch (error) {
-    console.log('Getting all tours failed');
+  } catch (err) {
+    response.status(404).json({
+      status: 'fail',
+      message: err,
+    });
   }
 };
 
@@ -61,8 +63,11 @@ exports.getOneBLTour = async (request, response) => {
         tour: findTour,
       },
     });
-  } catch (error) {
-    console.log('finding single tour failed');
+  } catch (err) {
+    response.status(404).json({
+      status: 'fail',
+      message: err,
+    });
   }
 };
 

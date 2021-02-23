@@ -13,6 +13,10 @@ const blTourController = require('../controllers/blTourController');
 // router.param('id', blTourController.checkID);
 
 router
+  .route('/top-5-tours')
+  .get(blTourController.bltTopTours, blTourController.getAllBLTours);
+
+router
   .route('/')
   .get(blTourController.getAllBLTours)
   .post(blTourController.createBLTour);

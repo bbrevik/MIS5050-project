@@ -50,6 +50,7 @@ const blTourSchema = new mongoose.Schema({
   tourCreatedDate: {
     type: Date,
     default: Date.now(),
+    select: false,
   },
   tourStartDates: [Date],
 });
