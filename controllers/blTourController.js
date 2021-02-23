@@ -7,7 +7,7 @@
  */
 
 const BLTour = require('../models/blTourModel');
-const APIProperties = require('../utilities/apiProperties');
+const APIProperties = require('../reusableCode/apiProperties');
 
 exports.bltTopTours = async (request, response, next) => {
   request.query.limit = '5';
