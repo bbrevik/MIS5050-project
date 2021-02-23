@@ -73,8 +73,8 @@ app.get('/', (request, response) => {
   response.render('index');
 });
 
-app.use('/api/v1/users', blUserRouter);
-app.use('/api/v1/tours', blTourRouter);
+app.use('/app/users', blUserRouter);
+app.use('/app/tours', blTourRouter);
 
 /**
  * The export module.exports = app declares we are exporting
