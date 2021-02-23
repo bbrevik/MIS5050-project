@@ -46,10 +46,10 @@ exports.getAllBLTours = async (request, response) => {
         tours: allBLTours,
       },
     });
-  } catch (err) {
+  } catch (error) {
     response.status(404).json({
-      status: 'fail',
-      message: err,
+      status: 'failed',
+      message: error,
     });
   }
 };
@@ -63,10 +63,10 @@ exports.getOneBLTour = async (request, response) => {
         tour: findTour,
       },
     });
-  } catch (err) {
+  } catch (error) {
     response.status(404).json({
-      status: 'fail',
-      message: err,
+      status: 'failed',
+      message: error,
     });
   }
 };
@@ -93,7 +93,7 @@ exports.createBLTour = async (request, response) => {
       },
     });
   } catch (error) {
-    response.json({
+    response.status(404).json({
       status: 'failed',
       message: error,
     });
@@ -117,7 +117,10 @@ exports.updateBLTour = async (request, response) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    response.status(404).json({
+      status: 'failed',
+      message: error,
+    });
   }
 };
 
@@ -129,6 +132,62 @@ exports.deleteBLTour = async (request, response) => {
       data: null,
     });
   } catch (error) {
-    console.log('Could not delete');
+    response.status(404).json({
+      status: 'failed',
+      message: error,
+    });
+  }
+};
+
+/**
+ * https://docs.mongodb.com/manual/aggregation/
+ * https://docs.mongodb.com/manual/reference/operator/aggregation/match/
+ * Filters the documents to pass only the documents that match the specified condition(s) to the next pipeline stage.
+ *
+ * https://docs.mongodb.com/manual/reference/operator/aggregation/group/
+ * Groups input documents by the specified _id expression and for each distinct grouping, outputs a document.
+ * The _id field of each output document contains the unique group by value. The output documents can also
+ * contain computed fields that hold the values of some accumulator expression.
+ *
+ * mongoDB aggregation
+ * The aggregation pipeline is a framework for data aggregation
+ * modeled on the concept of data processing pipelines. Documents
+ * enter a multi-stage pipeline that transforms the documents into aggregated results. For example:
+ */
+
+exports.getBucketListStats = async (request, response) => {
+  try {
+    const statistics = await BLTour.aggregate([
+      {
+        // select documents >= 4
+        $match: { tourRatingAverage: { $gte: 4 } },
+      },
+      {
+        $group: {
+          // this allows us to calculate averages
+          _id: { $toUpper: '$tourDifficulty' },
+          numberOfTours: { $sum: 1 },
+          numberOfRatings: { $sum: '$ratingsTotal' },
+          averageRating: { $avg: '$tourRatingAverage' },
+          averagePrice: { $avg: '$price' },
+          maxPrice: { $max: '$price' },
+          minPrice: { $min: '$price' },
+        },
+      },
+      {
+        $sort: { averagePrice: 1 },
+      },
+    ]);
+    response.status(200).json({
+      status: 'success',
+      data: {
+        statistics,
+      },
+    });
+  } catch (error) {
+    response.status(404).json({
+      status: 'failed',
+      message: error,
+    });
   }
 };

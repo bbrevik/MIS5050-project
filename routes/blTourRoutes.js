@@ -12,6 +12,8 @@ const blTourController = require('../controllers/blTourController');
 
 // router.param('id', blTourController.checkID);
 
+router.route('/blTour-stats').get(blTourController.getBucketListStats);
+
 router
   .route('/top-5-tours')
   .get(blTourController.bltTopTours, blTourController.getAllBLTours);
