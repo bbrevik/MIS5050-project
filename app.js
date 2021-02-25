@@ -27,15 +27,17 @@
 
 const express = require('express');
 const morgan = require('morgan');
-const layouts = require('express-ejs-layouts');
+// const layouts = require('express-ejs-layouts');
+const path = require('path');
 
 const blTourRouter = require('./routes/blTourRoutes');
 const blUserRouter = require('./routes/blUserRoutes');
 
 const app = express();
 app.set('view engine', 'ejs');
-app.use(layouts);
-app.use(express.static(`${__dirname}/public`));
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: false }));
 
 /**
  * This is the applications middleware functions
@@ -69,8 +71,9 @@ app.use((request, response, next) => {
 /**
  * we are declaring paths to our routes
  */
-app.get('/', (request, response) => {
-  response.render('index');
+app.get('/', (req, res) => {
+  // res.send("Hello world!...");
+  res.render('index');
 });
 
 app.use('/app/users', blUserRouter);
