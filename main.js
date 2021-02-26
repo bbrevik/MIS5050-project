@@ -30,9 +30,6 @@ const morgan = require('morgan');
 // const layouts = require('express-ejs-layouts');
 const path = require('path');
 
-const blTourRouter = require('./routes/blTourRoutes');
-const blUserRouter = require('./routes/blUserRoutes');
-
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -71,29 +68,6 @@ app.use((request, response, next) => {
 /**
  * we are declaring paths to our routes
  */
-
-app.use('/app/users', blUserRouter);
-app.use('/app/tours', blTourRouter);
-
-// https://codeburst.io/better-error-handling-in-express-js-b118fc29e9c7
-//
-
-// app.use('*', (request, response, next) => {
-//   let error = new Error(`ERROR: There is no path for ${request.originalUrl}`);
-//   error.status = 'failed';
-//   error.statusCode = 404;
-//   next(error);
-// });
-
-// app.use((error, request, response, next) => {
-//   error.statusCode = error.statusCode || 500;
-//   error.status = error.status || 'error';
-
-//   response.status(error.statusCode).json({
-//     status: error.status,
-//     message: error.message,
-//   });
-// });
 
 /**
  * The export module.exports = app declares we are exporting
