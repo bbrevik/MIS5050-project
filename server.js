@@ -27,7 +27,7 @@ const dotenv = require('dotenv');
 
 // This is the path to our dotenv configuration file
 dotenv.config({ path: './config.env' });
-const app = require('./app');
+const app = require('./main');
 
 /**
  * declaring our database string -> DB.

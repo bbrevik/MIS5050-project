@@ -57,10 +57,10 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 
 // This is a test middleware function
-app.use((request, response, next) => {
-  console.log('Hello from the middleware');
-  next();
-});
+// app.use((request, response, next) => {
+//   console.log('middleware being executed');
+//   next();
+// });
 
 // this is a call to get the time a request was made
 app.use((request, response, next) => {
@@ -71,13 +71,29 @@ app.use((request, response, next) => {
 /**
  * we are declaring paths to our routes
  */
-app.get('/', (req, res) => {
-  // res.send("Hello world!...");
-  res.render('index');
-});
 
 app.use('/app/users', blUserRouter);
 app.use('/app/tours', blTourRouter);
+
+// https://codeburst.io/better-error-handling-in-express-js-b118fc29e9c7
+//
+
+// app.use('*', (request, response, next) => {
+//   let error = new Error(`ERROR: There is no path for ${request.originalUrl}`);
+//   error.status = 'failed';
+//   error.statusCode = 404;
+//   next(error);
+// });
+
+// app.use((error, request, response, next) => {
+//   error.statusCode = error.statusCode || 500;
+//   error.status = error.status || 'error';
+
+//   response.status(error.statusCode).json({
+//     status: error.status,
+//     message: error.message,
+//   });
+// });
 
 /**
  * The export module.exports = app declares we are exporting
