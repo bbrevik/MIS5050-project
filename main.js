@@ -24,6 +24,7 @@
  * blUserRouter
  *      - These are the routes for tours and users.
  */
+const homeController = require('./controllers/homeController');
 
 const express = require('express');
 const morgan = require('morgan');
@@ -68,7 +69,8 @@ app.use((request, response, next) => {
 /**
  * we are declaring paths to our routes
  */
-
+app.get('/', homeController.mainIndex);
+app.get('/tour', homeController.tourIndex);
 /**
  * The export module.exports = app declares we are exporting
  * this app file and in server.js we are requiring in the app
