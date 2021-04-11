@@ -29,7 +29,9 @@
     "prefer-destructuring": ["error", { "object": true, "array": false }],
     "no-unused-vars": [
       "error",
-      { "argsIgnorePattern": "request|req|response|res|next|value|val" }
+      {
+        "argsIgnorePattern": "request|req|response|res|next|value|val|error|role"
+      }
     ]
   }
 }

@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true,
+  },
   tour: {
     type: mongoose.Schema.ObjectId,
     ref: 'Tour',
@@ -10,16 +15,11 @@ const bookingSchema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  user: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  createdAt: {
+  bookedDate: {
     type: Date,
     default: Date.now(),
   },
-  paid: {
+  isPaid: {
     type: Boolean,
     default: true,
   },

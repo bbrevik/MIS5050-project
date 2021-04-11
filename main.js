@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 'use-strict';
 
 /**
@@ -20,16 +22,19 @@
  * We start the app with everything we require
  * Express/Morgan see above
  *
- * blTourRouter
- * blUserRouter
+ * tourRouter
+ * userRouter
  *      - These are the routes for tours and users.
  */
-const homeController = require('./controllers/homeController');
 
 const express = require('express');
 const morgan = require('morgan');
 // const layouts = require('express-ejs-layouts');
 const path = require('path');
+// const homeController = require('./controllers/homeController');
+const errorController = require('./controllers/errorController');
+const tourRoutes = require('./routes/tourRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -63,17 +68,40 @@ app.use(express.json());
 // this is a call to get the time a request was made
 app.use((request, response, next) => {
   request.timeOfRequest = new Date().toISOString();
+
   next();
 });
 
 /**
  * we are declaring paths to our routes
  */
-app.get('/', homeController.mainIndex);
-app.get('/tour', homeController.tourIndex);
+
+app.use('/app/users', userRoutes);
+app.use('/app/tours', tourRoutes);
+
+// app.get('/', homeController.mainIndex);
+// app.get('/tour', homeController.tourIndex);
+
+// This will look at all routes that a user tries to visit and if it exists they will be redirected as usual
+// otherwise they will get an error message.
+app.all('*', (req, res, next) => {
+  // if an error we are going to pass a sting message.
+  const error = new Error(
+    `Sorry, we are having trouble finding ${req.originalUrl}.`
+  );
+  error.status = 'failed';
+  error.statusCode = 404;
+  // we need to pass the error to the next so it will execute.
+  next(error);
+});
+
+// middleware "error first function" to handel errors
+app.use(errorController.handleErrors);
+
 /**
  * The export module.exports = app declares we are exporting
  * this app file and in server.js we are requiring in the app
  * and starting the server.
  */
+
 module.exports = app;
