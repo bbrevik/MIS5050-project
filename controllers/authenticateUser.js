@@ -1,8 +1,10 @@
 /* eslint-disable arrow-body-style */
+
 const util = require('util');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
-const sendEmailToUser = require('../reusableCode/email');
+const sendMail = require('../reusableCode/email');
 
 const signToken = (id) => {
   return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -32,7 +34,7 @@ module.exports = {
     try {
       // See if the user has a token
       let usersToken;
-      console.log(req.headers.authorization);
+      // console.log(req.headers.authorization);
       if (
         req.headers.authorization &&
         req.headers.authorization.startsWith('Bearer')
@@ -51,7 +53,7 @@ module.exports = {
         usersToken,
         process.env.JWT_SECRET
       );
-      console.log(userData);
+      // console.log(userData);
 
       // Check to see if the user is in the database
       const loggedInUser = await User.findById(userData.id);
@@ -81,6 +83,40 @@ module.exports = {
       }
       next();
     };
+  },
+
+  updateUserPassword: async (req, res, next) => {
+    try {
+      // get the user
+      const currentUser = await User.findById(req.user.id).select('+password');
+
+      // verify password
+      // console.log(req.body);
+      if (
+        !(await currentUser.checkIfPasswordIsCorrect(
+          req.body.currentPassword,
+          currentUser.password
+        ))
+      ) {
+        return next(new Error('Your password is incorrect'));
+      }
+
+      // update password
+      currentUser.password = req.body.password;
+      currentUser.passwordConfirm = req.body.passwordConfirm;
+      currentUser.passwordResetExpireDate = undefined;
+      currentUser.userPasswordResetToken = undefined;
+      await currentUser.save();
+      console.log('here');
+      // sign the currentUser in
+      const newToken = signToken(currentUser._id);
+      res.json({
+        status: 'success',
+        newToken,
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 
   login: async (req, res, next) => {
@@ -113,6 +149,46 @@ module.exports = {
     }
   },
 
+  resetPasswordRequest: async (req, res, next) => {
+    try {
+      // Find the user by the token they have
+      // need to compare the hashed token in the db with the unscripted one but need to hash first
+      const userToken = crypto
+        .createHash('sha256')
+        .update(req.params.token)
+        .digest('hex');
+
+      // find the user and verify the token is valid and not expired
+      const currentUser = await User.findOne({
+        userPasswordResetToken: userToken,
+        passwordResetExpireDate: { $gt: Date.now() }, // check if the users token is greater then current time if so token is expired
+      });
+
+      // Make sure the token is not expired and valid
+      if (!currentUser) {
+        return next(
+          new Error('The reset request is expired. Please request again')
+        );
+      }
+
+      currentUser.password = req.body.password;
+      currentUser.passwordConfirm = req.body.passwordConfirm;
+      currentUser.passwordResetExpireDate = undefined;
+      currentUser.userPasswordResetToken = undefined;
+
+      await currentUser.save();
+      // update passwordChangedDate on the user model with the current date for the user
+      // sign the user in and provide a new jwt
+      const newToken = signToken(currentUser._id);
+      res.json({
+        status: 'success',
+        newToken,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   forgotPasswordRequest: async (req, res, next) => {
     try {
       // get the user from the email provided
@@ -130,9 +206,10 @@ module.exports = {
       )}/app/users/resetPassword/${usersResetToken}`;
 
       const message = `Please submit your request for a new password at: ${resetPasswordURL}`;
+      //  console.log(message);
 
       try {
-        await sendEmailToUser({
+        await sendMail({
           email: forgetfulUser.email,
           subject: 'Your password reset request',
           message,
@@ -142,15 +219,11 @@ module.exports = {
           message: 'An email was sent to the user',
         });
       } catch (error) {
-        forgetfulUser.passwordResetTokenForUser = undefined;
-        forgetfulUser.passwordResetExpireDate = undefined;
-        await forgetfulUser.save({ validateBeforeSave: false });
-
-        return next(new Error('Error sending email'));
+        next(error);
       }
+      // console.log(sendMail.email);
     } catch (error) {
       next(error);
     }
   },
-  resetPasswordRequest: (req, res, next) => {},
 };

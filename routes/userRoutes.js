@@ -13,8 +13,13 @@ const userController = require('../controllers/userController');
 // use the express router for our CRUD calls
 const router = express.Router();
 
-router.patch('/resetPassword/:token', authenticateUser.resetPasswordRequest);
-router.post('/forgotPassword', authenticateUser.forgotPasswordRequest);
+router.patch('/resetPassword/:token', authenticateUser.resetPasswordRequest); // This will be how the user is able to reset the password
+router.post('/forgotPassword', authenticateUser.forgotPasswordRequest); // This will send the user an email
+router.patch(
+  '/updatePassword',
+  authenticateUser.authCheck,
+  authenticateUser.updateUserPassword
+);
 
 router.post('/signup', authenticateUser.signup);
 router.post('/login', authenticateUser.login);

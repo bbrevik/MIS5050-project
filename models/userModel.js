@@ -57,7 +57,7 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// pre save between the data creation and being sent to the database
+// this saves the data before it is saved to the database
 userSchema.pre('save', async function (next) {
   // if the password is modified run below function
   if (!this.isModified('password')) return next(); // if hte password has not been modified return from the function and call next
@@ -70,10 +70,11 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+// this is a function that will run before it is saved
 userSchema.pre('save', function (next) {
   if (!this.isModified('password') || this.isNew) return next();
 
-  this.passwordChangedDate = Date.now() - 1000;
+  this.passwordChangedDate = Date.now() - 5000;
   next();
 });
 

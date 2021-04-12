@@ -18,26 +18,35 @@ https://mailtrap.io/how-it-works
   Mailtrap simulates the work of a real SMTP server. It isolates the staging emailing from production and eliminates any possibility of a test email to land in a real customer’s mailbox
 
  */
-const sendEmailToUser = async (options) => {
-  // we need to create a transporter
-  let transporter = nodemailer.createTransport({
-    port: process.env.EMAIL_PORT,
-    host: process.env.EMAIL_HOST,
-    auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
+const sendMail = async (userData) => {
+  try {
+    // we need to create a transporter
+    let transporter = nodemailer.createTransport(
+      {
+        port: process.env.EMAIL_PORT,
+        host: process.env.EMAIL_HOST,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      },
+      {
+        from: 'Bucket List Tours <bucketListTours@email.com>',
+      }
+    );
 
-  // Here we need to define the email
-  let userMailOptions = {
-    from: 'Bucket List Tours <bucketListTours@email.com>',
-    to: options.email,
-    subject: options.subject,
-    content: options.message,
-  };
+    // Here we need to define the email
+    let userMailOptions = {
+      to: userData.email,
+      subject: userData.subject,
+      text: userData.message,
+    };
 
-  await transporter.sendEmailToUser(userMailOptions);
+    await transporter.sendMail(userMailOptions);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-module.exports = sendEmailToUser;
+module.exports = sendMail;
