@@ -50,10 +50,10 @@ const userSchema = new mongoose.Schema({
   passwordChangedDate: Date,
   userPasswordResetToken: String,
 
-  active: {
+  accountIsActive: {
     type: Boolean,
-    default: true,
     select: false,
+    default: true,
   },
 });
 
@@ -78,8 +78,10 @@ userSchema.pre('save', function (next) {
   next();
 });
 
+// this is query middleware so the 'this' keyword will execute on the query calling it
 userSchema.pre(/^find/, function (next) {
-  this.find({ active: { $ne: false } });
+  // we only want to return the items that are marked active
+  this.find({ accountIsActive: { $ne: false } });
   next();
 });
 

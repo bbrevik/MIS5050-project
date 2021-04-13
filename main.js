@@ -32,6 +32,7 @@ const morgan = require('morgan');
 // const layouts = require('express-ejs-layouts');
 const path = require('path');
 // const homeController = require('./controllers/homeController');
+const helmet = require('helmet');
 const errorController = require('./controllers/errorController');
 const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -48,6 +49,8 @@ app.use(express.urlencoded({ extended: false }));
  * will call the controller and return some information.
  */
 
+// helmet is used for setting http security  https://github.com/helmetjs/helmet Helmet is a collection of 14 smaller middleware(s)
+app.use(helmet());
 // This middleware will be used for development reasons only it will log http requests
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));

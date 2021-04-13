@@ -21,6 +21,17 @@ router.patch(
   authenticateUser.updateUserPassword
 );
 
+router.patch(
+  '/updateUser',
+  authenticateUser.authCheck,
+  userController.updateUser
+);
+
+router.delete(
+  '/deleteUser',
+  authenticateUser.authCheck,
+  userController.deleteUser
+);
 router.post('/signup', authenticateUser.signup);
 router.post('/login', authenticateUser.login);
 

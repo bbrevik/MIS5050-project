@@ -12,12 +12,20 @@ const signToken = (id) => {
   });
 };
 
+const jwtCookie = {
+  expires: new Date(
+    Date.now() + process.env.JWT_COOKIE_EXPIRES * 86400000 // converting to milliseconds
+  ),
+  httpOnly: true,
+};
+
 module.exports = {
   // sign up a new user
   signup: async (req, res, next) => {
     try {
       const createdUser = await User.create(req.body);
       const userToken = signToken(createdUser.id);
+      res.cookie('jwt', userToken, jwtCookie);
       res.json({
         status: 'success',
         userToken,
@@ -140,6 +148,7 @@ module.exports = {
       }
       // send web token is everything passes
       const userToken = signToken(user._id);
+      res.cookie('jwt', userToken, jwtCookie);
       res.json({
         status: 'success',
         userToken,
@@ -180,6 +189,7 @@ module.exports = {
       // update passwordChangedDate on the user model with the current date for the user
       // sign the user in and provide a new jwt
       const newToken = signToken(currentUser._id);
+      res.cookie('jwt', userToken, jwtCookie);
       res.json({
         status: 'success',
         newToken,
