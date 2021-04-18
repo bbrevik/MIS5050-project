@@ -14,6 +14,6 @@ const homeController = require('../controllers/homeController');
 
 router.get('/', homeController.overviewPage);
 
-router.get('/tour', homeController.tourPage);
+router.get('/tour/:slug', homeController.tourPage);
 
 module.exports = router;

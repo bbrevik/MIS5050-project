@@ -13,8 +13,19 @@ exports.overviewPage = async (req, res, next) => {
   }
 };
 
-exports.tourPage = (req, res) => {
-  res.render('tour', {
-    title: 'The forest Hiker',
-  });
+exports.tourPage = async (req, res, next) => {
+  try {
+    const bltour = await BLTour.findOne({ slug: req.params.slug }).populate({
+      path: 'review',
+      fields: 'user rating review',
+    });
+    console.log(bltour);
+
+    res.render('tour', {
+      title: `${bltour.name} Tour`,
+      bltour,
+    });
+  } catch (error) {
+    next(error);
+  }
 };

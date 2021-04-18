@@ -1,3 +1,92 @@
 
 
-h1 This is the tour page
+
+extends layout
+
+mixin overviewSection(label,icon,  text)
+  .overview-box__detail
+    svg.overview-box__icon
+      use(xlink:href=`/images/icons.svg#icon-${icon}`)
+    span.overview-box__label= label
+    span.overview-box__text= text
+
+mixin reviewSection(review)
+  .reviews__card
+    .reviews__avatar
+      img.reviews__avatar-img(src=`/img/users/${review.user.photo}`, alt=`${review.user.name}`)
+      h6.reviews__user= review.user.name
+    p.reviews__text= review.review
+    .reviews__rating
+      each star in [1, 2, 3, 4, 5]
+        svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
+          use(xlink:href='/img/icons.svg#icon-star')
+
+block content
+  section.section-header
+    .header__hero
+      .header__hero-overlay &nbsp;
+      img.card__picture-img(src=`/images/tours/${bltour.tourMainImageName}` alt=`${bltour.name}`)
+    .heading-box
+      h1.heading-primary
+        span= `${bltour.name}`
+      .heading-box__group
+        .heading-box__detail
+          svg.heading-box__icon
+            use(xlink:href='/images/icons.svg#icon-clock')
+          span.heading-box__text= `${bltour.duration} days`
+        .heading-box__detail
+          svg.heading-box__icon
+            use(xlink:href='/images/icons.svg#icon-map-pin')
+          span.heading-box__text= bltour.startingPoint.description
+  section.section-description
+    .overview-box
+      div
+        .overview-box__group
+          h2.heading-secondary.ma-bt-lg Overview
+          - const newDate = new Date(bltour.tourStartDates[0]).toLocaleString('en-us', {month: 'long', year: 'numeric'})
+          +overviewSection("Next Date","calendar",  newDate )
+          +overviewSection("Difficulty","trending-up",  bltour.tourDifficulty )
+          +overviewSection( "Average Rating","star", `${bltour.tourRatingAverage} / 5`  )
+        .overview-box__group
+          h2.heading-secondary.ma-bt-lg Heres are your guides
+          each tourGuide in bltour.guides
+            .overview-box__detail
+              img.overview-box__img(src=`/images/users/${tourGuide.photo}`, alt=`${tourGuide.name}`)
+              span.overview-box__label= tourGuide.name
+              - if(tourGuide.role === 'guide-admin')
+                span.overview-box__label Lead Guide
+              - if(tourGuide.role === 'guide')
+                span.overview-box__label Guide
+    .description-box
+      h2.heading-secondary.ma-bt-lg= `About ${bltour.name} tour`
+      - const parapraphs = bltour.description.split('\n');
+      each p in parapraphs
+        p.description__text= p
+
+  section.section-pictures
+    each image, i in bltour.otherTourImages
+      .picture-box
+        img.picture-box__img(src=`/images/tours/${image}`, class=`picture-box__img--${i + 1}`)
+
+  //- section.section-map
+  //-   #map(data-locations=`${JSON.stringify(tour.locations)}`)
+
+  section.section-reviews
+  //-   .reviews
+  //-     each review in bltour.reviews
+  //-       +reviewSection(review)
+
+  section.section-cta
+    .cta
+      .cta__img.cta__img--logo
+        img(src='/images/logo-white.png',)
+      img.cta__img.cta__img--1(src='/images/logo-white.png', alt='Tour picture')
+      img.cta__img.cta__img--2(src=`/images/tours/${bltour.tourMainImageName}`, alt='Tour picture')
+      .cta__content
+        h2.heading-secondary What are you waiting for?
+        p.cta__text= `${bltour.duration} days. 1 adventure. Countless memories. Make it yours today!`
+
+        if user
+          button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+        else
+          a.btn.btn--green.span-all-rows(href='/login') Log in to book tour

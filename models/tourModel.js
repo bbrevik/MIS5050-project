@@ -110,6 +110,12 @@ const blTourSchema = new mongoose.Schema(
 
 blTourSchema.index({ startingPoint: '2dsphere' });
 
+blTourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
+
 /**
  * https://github.com/makwanakishan/CRUD-operation/blob/c9f1713fa5b4d1dcea86a2ed85643e664f597b9e/models/tourModel.js#L136
  * https://mongoosejs.com/docs/middleware.html
@@ -178,16 +184,19 @@ blTourSchema.pre(/^find/, function (next) {
   next();
 });
 
-blTourSchema.post(/^find/, function (docs, next) {
-  // console.log(docs);
-  console.log(`This query took ${Date.now() - this.start} in milliseconds.`);
+// This will allow to populate the guides on the tour page
+blTourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+  });
   next();
 });
 
-blTourSchema.virtual('reviews', {
-  ref: 'Review',
-  foreignField: 'tour',
-  localField: '_id',
+blTourSchema.post(/^find/, function (docs, next) {
+  // console.log(docs);
+  console.log(`This query took ${Date.now() - this.start} in milliseconds.`);
+
+  next();
 });
 
 /**
