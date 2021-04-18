@@ -74,6 +74,7 @@ module.exports = {
 
   createReview: async (req, res, next) => {
     try {
+      console.log('here');
       if (!req.body.tour) req.body.tour = req.params.tourId;
       if (!req.body.user) req.body.user = req.user.id;
       const createNewReview = await Review.create(req.body);

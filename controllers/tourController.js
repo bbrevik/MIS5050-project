@@ -55,6 +55,83 @@ exports.getAllBLTours = async (request, response, next) => {
   }
 };
 
+// https://docs.mongodb.com/manual/reference/operator/query/geoWithin/
+// this will find documents within a specific distance using geolocation
+exports.getWithinDist = async (req, res, next) => {
+  //  '/toursWithin/:dis/center/:userLocation/unit/:unit'
+  try {
+    const { dis, userLocation, unit } = req.params;
+    userLocation.split(',');
+    const [latitude, longitude] = userLocation.split(',');
+
+    const radius = unit === 'mi' ? dis / 3963.2 : dis / 6378.1;
+
+    if ((!latitude, !longitude)) {
+      return next(new Error('You do not have the location entered correctly.'));
+    }
+
+    const tours = await BLTour.find({
+      startingPoint: {
+        $geoWithin: { $centerSphere: [[longitude, latitude], radius] },
+      },
+    });
+
+    res.json({
+      status: 'success',
+      results: tours.length,
+      data: {
+        data: tours,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getDistanceToTours = async (req, res, next) => {
+  try {
+    // '/distances/:userLocation/unit/:unit'
+    const { userLocation, unit } = req.params;
+    userLocation.split(',');
+    const [latitude, longitude] = userLocation.split(',');
+
+    const distFix = unit === 'mi' ? 0.000621371 : 0.001;
+
+    if ((!latitude, !longitude)) {
+      return next(new Error('You do not have the location entered correctly.'));
+    }
+
+    const distances = await BLTour.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [longitude * 1, latitude * 1],
+          },
+          distanceField: 'distance',
+          distanceMultiplier: distFix,
+        },
+      },
+      {
+        $project: {
+          distance: 1,
+          name: 1,
+        },
+      },
+    ]);
+
+    res.json({
+      status: 'success',
+
+      data: {
+        data: distances,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.getOneBLTour = async (request, response, next) => {
   try {
     const findTour = await BLTour.findById(request.params.id)

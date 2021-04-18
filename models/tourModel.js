@@ -35,7 +35,13 @@ const blTourSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Please enter the maximum number of group members.'],
     },
-    tourRatingAverage: { type: Number, default: 3, min: 1, max: 5 },
+    tourRatingAverage: {
+      type: Number,
+      default: 3,
+      min: 1,
+      max: 5,
+      set: (val) => Math.round(val * 10) / 10,
+    },
     ratingsTotal: { type: Number, default: 0 },
     price: {
       type: Number,
@@ -101,6 +107,8 @@ const blTourSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+blTourSchema.index({ startingPoint: '2dsphere' });
 
 /**
  * https://github.com/makwanakishan/CRUD-operation/blob/c9f1713fa5b4d1dcea86a2ed85643e664f597b9e/models/tourModel.js#L136

@@ -85,7 +85,8 @@ module.exports = {
 
   validateIsAdmin: (...role) => {
     return (req, res, next) => {
-      // check if user is admin type
+      // check the type of user
+      console.log(req.user.role);
       if (!role.includes(req.user.role)) {
         return next(new Error('You cannot perform that action.'));
       }

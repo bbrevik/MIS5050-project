@@ -105,6 +105,11 @@ module.exports = {
   //     next(error);
   //   }
   // },
+  getUser: async (request, response, next) => {
+    console.log('updating params');
+    request.params.id = request.user.id;
+    next();
+  },
 
   getOneUser: async (request, response, next) => {
     try {

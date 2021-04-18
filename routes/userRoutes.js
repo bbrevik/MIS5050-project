@@ -18,25 +18,18 @@ const router = express.Router();
 
 router.patch('/resetPassword/:token', authenticateUser.resetPasswordRequest); // This will be how the user is able to reset the password
 router.post('/forgotPassword', authenticateUser.forgotPasswordRequest); // This will send the user an email
-router.patch(
-  '/updatePassword',
-  authenticateUser.authCheck,
-  authenticateUser.updateUserPassword
-);
 
-router.patch(
-  '/updateUser',
-  authenticateUser.authCheck,
-  userController.updateUser
-);
-
-router.delete(
-  '/deleteUser',
-  authenticateUser.authCheck,
-  userController.deleteUser
-);
 router.post('/signup', authenticateUser.signup);
 router.post('/login', authenticateUser.login);
+
+router.use(authenticateUser.authCheck);
+
+router.patch('/updatePassword', authenticateUser.updateUserPassword);
+router.get('/me', userController.getUser, userController.getOneUser);
+router.patch('/updateMe', userController.updateUser);
+router.delete('/deleteMe', userController.deleteUser);
+
+router.use(authenticateUser.validateIsAdmin('admin'));
 
 router
   .route('/')

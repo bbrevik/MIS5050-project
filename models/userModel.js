@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
   },
   passwordConfirm: {
     type: String,
-    required: [false, 'Please confirm your password'],
+    required: [true, 'Please confirm your password'],
     validate: {
       // The function below will only work on a save
       validator: function (passwordEntered) {
@@ -63,7 +63,7 @@ userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next(); // if hte password has not been modified return from the function and call next
 
   // encrypt the password with cost of 12 using bcryptjs
-  this.password = await bcrypt.hash(this.password, 10); // this.password is what we are going to hash/encrypt the 10 is the salt/length of the hash and how CPU intensive it is
+  this.password = await bcrypt.hash(this.password, 12); // this.password is what we are going to hash/encrypt the 10 is the salt/length of the hash and how CPU intensive it is
 
   // Delete passwordConfirm field
   this.passwordConfirm = undefined;
@@ -110,7 +110,7 @@ userSchema.methods.passwordChangedAfterToken = function (JWTTimestamp) {
 
 // this method will be used to send a password reset token for a forgotten password
 userSchema.methods.passwordResetTokenForUser = function () {
-  const userResetToken = crypto.randomBytes(64).toString('hex'); // this creates a reset token but is not hashed
+  const userResetToken = crypto.randomBytes(32).toString('hex'); // this creates a reset token but is not hashed
 
   this.userPasswordResetToken = crypto // this will allow us to hash the token using crypto a node built in module
     .createHash('sha256')

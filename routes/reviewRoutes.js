@@ -8,11 +8,12 @@ const reviewController = require('../controllers/reviewController');
 
 const router = express.Router({ mergeParams: true });
 
+router.use(authenticateUser.authCheck); // make sure the user is authenticated
+
 router
   .route('/')
   .get(reviewController.getAllReviews)
   .post(
-    authenticateUser.authCheck,
     authenticateUser.validateIsAdmin('user'),
     reviewController.createReview
   );
@@ -20,13 +21,19 @@ router
 router
   .route('/:id')
   .get(reviewController.getOneReview)
-  .patch(reviewController.updateReview)
-  .delete(reviewController.deleteReview);
+  .patch(
+    authenticateUser.validateIsAdmin('user', 'admin'),
+    reviewController.updateReview
+  )
+  .delete(
+    authenticateUser.validateIsAdmin('user', 'admin'),
+    reviewController.deleteReview
+  );
 
 // router
 //   .route('/:tourId/reviews')
 //   .post(
-//     authenticateUser.authCheck,
+//
 //     authenticateUser.validateIsAdmin('user'),
 //     reviewController.createReview
 //   );

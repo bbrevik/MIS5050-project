@@ -25,14 +25,30 @@ router.use('/:tourId/reviews', reviewRouter);
 //     reviewController.createReview
 //   );
 
+router.route('/tour-stats').get(tourController.getBucketListStats);
+router
+  .route('/top-ten')
+  .get(tourController.bltTopTours, tourController.getAllBLTours);
+
+router
+  .route('/distances/:userLocation/unit/:unit')
+  .get(tourController.getDistanceToTours);
+router
+  .route('/toursWithin/:dis/center/:userLocation/unit/:unit')
+  .get(tourController.getWithinDist);
+
 router
   .route('/')
-  .get(authenticateUser.authCheck, tourController.getAllBLTours)
+  .get(tourController.getAllBLTours)
   .post(tourController.createBLTour);
 router
   .route('/:id')
   .get(tourController.getOneBLTour)
-  .patch(tourController.updateBLTour)
+  .patch(
+    authenticateUser.authCheck,
+    authenticateUser.validateIsAdmin('admin', 'guide-admin'),
+    tourController.updateBLTour
+  )
   .delete(
     authenticateUser.authCheck,
     authenticateUser.validateIsAdmin('admin', 'guide-admin'),
