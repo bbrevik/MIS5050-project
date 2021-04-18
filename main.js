@@ -31,15 +31,19 @@ const express = require('express');
 const morgan = require('morgan');
 // const layouts = require('express-ejs-layouts');
 const path = require('path');
-// const homeController = require('./controllers/homeController');
 const helmet = require('helmet');
+// eslint-disable-next-line no-unused-vars
+const homeController = require('./controllers/homeController');
 const errorController = require('./controllers/errorController');
 const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const viewRoutes = require('./routes/viewRouting');
 
 const app = express();
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
+// app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: false }));
@@ -79,6 +83,7 @@ app.use((request, response, next) => {
 /**
  * we are declaring paths to our routes
  */
+app.use('/', viewRoutes);
 
 app.use('/app/users', userRoutes);
 app.use('/app/tours', tourRoutes);
