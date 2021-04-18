@@ -10,6 +10,20 @@ const express = require('express');
 const router = express.Router();
 const tourController = require('../controllers/tourController');
 const authenticateUser = require('../controllers/authenticateUser');
+// eslint-disable-next-line no-unused-vars
+const reviewController = require('../controllers/reviewController');
+const reviewRouter = require('./reviewRoutes');
+
+// console.log('at tourId/review'); Mounting a path from the tour routes to the review router
+router.use('/:tourId/reviews', reviewRouter);
+
+// router
+//   .route('/:tourId/reviews')
+//   .post(
+//     authenticateUser.authCheck,
+//     authenticateUser.validateIsAdmin('user'),
+//     reviewController.createReview
+//   );
 
 router
   .route('/')

@@ -7,64 +7,100 @@ const mongoose = require('mongoose');
  * Weekly Downloads 1,424,048
  */
 const slugify = require('slugify');
+// eslint-disable-next-line no-unused-vars
+const User = require('./userModel');
 /**
  * Schemas for the database
  * Here is where we need to declare the parts that will make up
  * the mongoose document and handel some validation.
  */
 
-const blTourSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    unique: true,
-    trim: true,
-    required: [true, 'Please provide a name for the tour.'],
+const blTourSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      unique: true,
+      trim: true,
+      required: [true, 'Please provide a name for the tour.'],
+    },
+    tourDifficulty: {
+      type: String,
+      required: [true, 'Please state the difficulty level'],
+      enum: {
+        values: ['easy', 'medium', 'difficult'],
+      },
+    },
+    guides: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    groupSizeMax: {
+      type: Number,
+      required: [true, 'Please enter the maximum number of group members.'],
+    },
+    tourRatingAverage: { type: Number, default: 3, min: 1, max: 5 },
+    ratingsTotal: { type: Number, default: 0 },
+    price: {
+      type: Number,
+      required: [true, 'Please provide a price for the tour.'],
+    },
+    tourDiscountPrice: { type: Number },
+    duration: {
+      type: Number,
+      required: [true, 'Please enter the duration of the trip'],
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    tourSummary: {
+      type: String,
+      required: [true, 'Please enter a tour summary'],
+      trim: true,
+    },
+    startingPoint: {
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      address: String,
+      description: String,
+      coordinates: [Number],
+    },
+    allLocations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+          address: String,
+          description: String,
+          coordinates: [Number],
+          day: Number,
+        },
+      },
+    ],
+    vipTour: {
+      type: Boolean,
+      default: false,
+    },
+
+    tourMainImageName: {
+      type: String,
+      required: [true, 'Please add a tour image'],
+    },
+    slug: String,
+    otherTourImages: [String],
+    tourCreatedDate: {
+      type: Date,
+      default: Date.now(),
+      select: false,
+    },
+    tourStartDates: [Date],
   },
-  tourDifficulty: {
-    type: String,
-    required: [true, 'Please state the difficulty level'],
-  },
-  groupSizeMax: {
-    type: Number,
-    required: [true, 'Please enter the maximum number of group members.'],
-  },
-  tourRatingAverage: { type: Number, default: 0 },
-  ratingsTotal: { type: Number, default: 0 },
-  price: {
-    type: Number,
-    required: [true, 'Please provide a price for the tour.'],
-  },
-  tourDiscountPrice: { type: Number },
-  duration: {
-    type: Number,
-    required: [true, 'Please enter the duration of the trip'],
-  },
-  description: {
-    type: String,
-    trim: true,
-  },
-  tourSummary: {
-    type: String,
-    required: [true, 'Please enter a tour summary'],
-    trim: true,
-  },
-  vipTour: {
-    type: Boolean,
-    default: false,
-  },
-  tourMainImageName: {
-    type: String,
-    required: [true, 'Please add a tour image'],
-  },
-  slug: String,
-  otherTourImages: [String],
-  tourCreatedDate: {
-    type: Date,
-    default: Date.now(),
-    select: false,
-  },
-  tourStartDates: [Date],
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 /**
  * https://github.com/makwanakishan/CRUD-operation/blob/c9f1713fa5b4d1dcea86a2ed85643e664f597b9e/models/tourModel.js#L136
@@ -138,6 +174,12 @@ blTourSchema.post(/^find/, function (docs, next) {
   // console.log(docs);
   console.log(`This query took ${Date.now() - this.start} in milliseconds.`);
   next();
+});
+
+blTourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
 });
 
 /**

@@ -65,32 +65,80 @@ module.exports = {
     }
   },
 
-  // This will return a user
-  getBLTUser: (request, response) => {
-    response.json({
-      status: 'error',
-      message: 'This route is to be defined later',
-    });
+  // The create is now done with the signup feature
+
+  // createBLTUser: async (request, response, next) => {
+  //   try {
+  //     const createNewTour = await User.create(request.body);
+  //     response.json({
+  //       status: 'success',
+  //       data: {
+  //         tour: createNewTour,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // },
+  //
+  // updateBLTUser: async (request, response, next) => {
+  //   try {
+  //     const item = await User.findByIdAndUpdate(
+  //       request.params.id,
+  //       request.body,
+  //       {
+  //         new: true,
+  //         runValidators: true,
+  //       }
+  //     );
+  //     if (!item) {
+  //       response.render('errors/404');
+  //     }
+
+  //     response.json({
+  //       status: 'success',
+  //       data: {
+  //         tour: item,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // },
+
+  getOneUser: async (request, response, next) => {
+    try {
+      const item = await User.findById(request.params.id);
+
+      if (!item) {
+        response.render('errors/404');
+      }
+
+      response.json({
+        status: 'success',
+        data: {
+          tour: item,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 
-  createBLTUser: (request, response) => {
-    response.json({
-      status: 'error',
-      message: 'This route is to be defined later',
-    });
-  },
+  deleteBLTUser: async (request, response, next) => {
+    try {
+      const item = await User.findByIdAndDelete(request.params.id);
 
-  updateBLTUser: (request, response) => {
-    response.json({
-      status: 'error',
-      message: 'This route is to be defined later',
-    });
-  },
+      if (!item) {
+        response.render('errors/404');
+      }
 
-  deleteBLTUser: (request, response) => {
-    response.json({
-      status: 'error',
-      message: 'This route is to be defined later',
-    });
+      response.json({
+        status: 'success',
+        data: null,
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 };

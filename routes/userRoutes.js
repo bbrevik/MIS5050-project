@@ -7,7 +7,10 @@
  */
 // first require in the modules/files
 const express = require('express');
+
 const authenticateUser = require('../controllers/authenticateUser');
+// eslint-disable-next-line no-unused-vars
+const reviewController = require('../controllers/reviewController');
 const userController = require('../controllers/userController');
 
 // use the express router for our CRUD calls
@@ -38,11 +41,12 @@ router.post('/login', authenticateUser.login);
 router
   .route('/')
   .get(userController.getBLTUsers)
-  .post(userController.createBLTUser);
+  .post(userController.updateUser);
+
 router
   .route('/:id')
-  .get(userController.getBLTUser)
-  .patch(userController.updateBLTUser)
+  .get(userController.getOneUser)
+  .patch(userController.updateUser)
   .delete(userController.deleteBLTUser);
 
 // export the router so we can call this from the app file

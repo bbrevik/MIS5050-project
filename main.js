@@ -36,6 +36,7 @@ const helmet = require('helmet');
 const errorController = require('./controllers/errorController');
 const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -81,6 +82,7 @@ app.use((request, response, next) => {
 
 app.use('/app/users', userRoutes);
 app.use('/app/tours', tourRoutes);
+app.use('/app/reviews', reviewRoutes);
 
 // app.get('/', homeController.mainIndex);
 // app.get('/tour', homeController.tourIndex);

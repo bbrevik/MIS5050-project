@@ -8,6 +8,9 @@
 
 const BLTour = require('../models/tourModel');
 const APIProperties = require('../reusableCode/apiProperties');
+// eslint-disable-next-line no-unused-vars
+const User = require('../models/userModel');
+const crud = require('./crudController');
 
 exports.bltTopTours = async (request, response, next) => {
   request.query.limit = '10';
@@ -39,7 +42,7 @@ exports.getAllBLTours = async (request, response, next) => {
       .paginate();
 
     // allBLTours will wait until the property is built then pass it to the variable allBLTours
-    const allBLTours = await bltProperty.bltQuery;
+    const allBLTours = await bltProperty.bltQuery.populate('guides');
     response.json({
       status: 'success',
       results: allBLTours.length,
@@ -54,7 +57,9 @@ exports.getAllBLTours = async (request, response, next) => {
 
 exports.getOneBLTour = async (request, response, next) => {
   try {
-    const findTour = await BLTour.findById(request.params.id);
+    const findTour = await BLTour.findById(request.params.id)
+      .populate('guides')
+      .populate('reviews');
 
     if (!findTour) {
       response.render('errors/404');
@@ -118,22 +123,24 @@ exports.updateBLTour = async (request, response, next) => {
   }
 };
 
-exports.deleteBLTour = async (request, response, next) => {
-  try {
-    const deleteTour = await BLTour.findByIdAndDelete(request.params.id);
+exports.deleteBLTour = crud.deleteItem(BLTour);
 
-    if (!deleteTour) {
-      response.render('errors/404');
-    }
+// exports.deleteBLTour = async (request, response, next) => {
+//   try {
+//     const deleteTour = await BLTour.findByIdAndDelete(request.params.id);
 
-    response.json({
-      status: 'success',
-      data: null,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+//     if (!deleteTour) {
+//       response.render('errors/404');
+//     }
+
+//     response.json({
+//       status: 'success',
+//       data: null,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 /**
  * https://docs.mongodb.com/manual/aggregation/
