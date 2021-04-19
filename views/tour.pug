@@ -1,6 +1,3 @@
-
-
-
 extends layout
 
 mixin overviewSection(label,icon,  text)
@@ -72,6 +69,39 @@ block content
   //-   #map(data-locations=`${JSON.stringify(tour.locations)}`)
 
   section.section-reviews
+    .reviews
+      .reviews__card
+        .reviews__avatar
+          img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='Jim Brown')
+          h6.reviews__user Jenny Larson
+        p.reviews__text Still need to populate the reviews section
+        .reviews__rating
+          svg.reviews__star.reviews__star--active
+            use(xlink:href='/images/icons.svg#icon-star')
+          svg.reviews__star.reviews__star--active
+            use(xlink:href='/images/icons.svg#icon-star')
+          svg.reviews__star.reviews__star--active
+            use(xlink:href='/images/icons.svg#icon-star')
+          svg.reviews__star.reviews__star--active
+            use(xlink:href='/images/icons.svg#icon-star')
+      .reviews__card
+          .reviews__avatar
+            img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='Jim Brown')
+            h6.reviews__user Jenny Larson
+          p.reviews__text Still need to populate the reviews section
+          .reviews__rating
+            svg.reviews__star.reviews__star--active
+              use(xlink:href='/images/icons.svg#icon-star')
+            svg.reviews__star.reviews__star--active
+              use(xlink:href='/images/icons.svg#icon-star')
+            svg.reviews__star.reviews__star--active
+              use(xlink:href='/images/icons.svg#icon-star')
+            svg.reviews__star.reviews__star--active
+              use(xlink:href='/images/icons.svg#icon-star')
+    
+  
+
+  
   //-   .reviews
   //-     each review in bltour.reviews
   //-       +reviewSection(review)
