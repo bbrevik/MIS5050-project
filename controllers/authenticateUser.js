@@ -38,6 +38,40 @@ module.exports = {
     }
   },
 
+  isUserLoggedIn: async (req, res, next) => {
+    try {
+      // See if the user has a token
+
+      if (req.cookies.jwt) {
+        // Verification if the users token is expired
+        const userData = await util.promisify(jwt.verify)(
+          req.cookies.jwt,
+          process.env.JWT_SECRET
+        );
+        // console.log(userData);
+
+        // Check to see if the user is in the database
+        const loggedInUser = await User.findById(userData.id);
+        if (!loggedInUser) {
+          return next();
+        }
+
+        // Check to see if the user has changed their password after the token was created
+        // iat is issued at so the userData issued at
+        if (loggedInUser.passwordChangedAfterToken(userData.iat)) {
+          return next();
+        }
+
+        // The user should have access to the route
+        res.locals.user = loggedInUser;
+        return next();
+      }
+      next();
+    } catch (error) {
+      next(error);
+    }
+  },
+
   authCheck: async (req, res, next) => {
     try {
       // See if the user has a token
@@ -48,6 +82,8 @@ module.exports = {
         req.headers.authorization.startsWith('Bearer')
       ) {
         usersToken = req.headers.authorization.split(' ')[1];
+      } else if (req.cookies.jwt) {
+        usersToken = req.cookies.jwt;
       }
 
       if (!usersToken) {

@@ -1,5 +1,10 @@
 extends layout
 
+block append head
+  script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
+  link(href='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css' rel='stylesheet')
+
+
 mixin overviewSection(label,icon,  text)
   .overview-box__detail
     svg.overview-box__icon
@@ -63,18 +68,17 @@ block content
   section.section-pictures
     each image, i in bltour.otherTourImages
       .picture-box
-        img.picture-box__img(src=`/images/tours/${image}`, class=`picture-box__img--${i + 1}`)
+        img.picture-box__img(src=`/images/tours/${image}`, class=`picture-box__img--${i + 1}` alt="alt")
 
-  //- section.section-map
-  //-   #map(data-locations=`${JSON.stringify(tour.locations)}`)
-
+  section.section-map
+    #map(data-locations=`${JSON.stringify(bltour.allLocations)}`)
   section.section-reviews
     .reviews
       .reviews__card
         .reviews__avatar
-          img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='Jim Brown')
+          img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='alt')
           h6.reviews__user Jenny Larson
-        p.reviews__text Still need to populate the reviews section
+        p.reviews__text Still need o populate the reviews section
         .reviews__rating
           svg.reviews__star.reviews__star--active
             use(xlink:href='/images/icons.svg#icon-star')
@@ -86,7 +90,7 @@ block content
             use(xlink:href='/images/icons.svg#icon-star')
       .reviews__card
           .reviews__avatar
-            img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='Jim Brown')
+            img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='alt')
             h6.reviews__user Jenny Larson
           p.reviews__text Still need to populate the reviews section
           .reviews__rating

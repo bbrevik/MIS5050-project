@@ -33,7 +33,8 @@ const morgan = require('morgan');
 const path = require('path');
 const helmet = require('helmet');
 // eslint-disable-next-line no-unused-vars
-const homeController = require('./controllers/homeController');
+const cookieParser = require('cookie-parser');
+// const homeController = require('./controllers/homeController');
 const errorController = require('./controllers/errorController');
 const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -55,7 +56,57 @@ app.use(express.urlencoded({ extended: false }));
  */
 
 // helmet is used for setting http security  https://github.com/helmetjs/helmet Helmet is a collection of 14 smaller middleware(s)
-app.use(helmet());
+app.use(cookieParser());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
+        baseUri: ["'self'"],
+        fontSrc: ["'self'", 'https:', 'data:'],
+        scriptSrc: [
+          "'self'",
+          'https:',
+          'http:',
+          'blob:',
+          'https://*.mapbox.com',
+          'https://js.stripe.com',
+          'https://m.stripe.network',
+          'https://*.cloudflare.com',
+        ],
+        frameSrc: ["'self'", 'https://js.stripe.com'],
+        objectSrc: ["'none'"],
+        styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+        workerSrc: [
+          "'self'",
+          "'img-src'",
+          'data:',
+          'blob:',
+          'https://*.tiles.mapbox.com',
+          'https://api.mapbox.com',
+          'https://events.mapbox.com',
+          'https://m.stripe.network',
+        ],
+        childSrc: ["'self'", 'blob:'],
+        imgSrc: ["'self'", 'data:', 'blob:'],
+        formAction: ["'self'"],
+        connectSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          'data:',
+          'blob:',
+          'https://*.stripe.com',
+          'https://*.mapbox.com',
+          'https://*.cloudflare.com/',
+          'https://bundle.js:*',
+          'ws://127.0.0.1:3000',
+          'ws://localhost:3000',
+        ],
+        upgradeInsecureRequests: [],
+      },
+    },
+  })
+);
 // This middleware will be used for development reasons only it will log http requests
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -76,7 +127,7 @@ app.use(express.json());
 // this is a call to get the time a request was made
 app.use((request, response, next) => {
   request.timeOfRequest = new Date().toISOString();
-
+  console.log(request.cookies);
   next();
 });
 
