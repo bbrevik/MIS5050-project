@@ -22,6 +22,8 @@ router.post('/forgotPassword', authenticateUser.forgotPasswordRequest); // This 
 router.post('/signup', authenticateUser.signup);
 router.post('/login', authenticateUser.login);
 
+router.get('/logout', authenticateUser.logout);
+
 router.use(userController.getUser);
 
 router.use(authenticateUser.authCheck);

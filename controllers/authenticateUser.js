@@ -246,6 +246,16 @@ module.exports = {
     }
   },
 
+  logout: (req, res, next) => {
+    res.cookie('jwt', '', {
+      expires: new Date(Date.now() + 10000),
+      httpOnly: true,
+    });
+    res.json({
+      status: 'success',
+    });
+  },
+
   forgotPasswordRequest: async (req, res, next) => {
     try {
       // get the user from the email provided
