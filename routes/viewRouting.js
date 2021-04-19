@@ -7,15 +7,18 @@
  */
 
 const express = require('express');
-// const authenticateUser = require('../controllers/authenticateUser');
+const authenticateUser = require('../controllers/authenticateUser');
 
 const router = express.Router();
 
 const homeController = require('../controllers/homeController');
 
-// router.use(authenticateUser.isUserLoggedIn);
+router.use(authenticateUser.isUserLoggedIn);
 
 router.get('/', homeController.overviewPage);
+
+// router.use(authenticateUser.authCheck);
+
 router.get('/tour/:slug', homeController.tourPage);
 router.get('/login', homeController.loginPage);
 

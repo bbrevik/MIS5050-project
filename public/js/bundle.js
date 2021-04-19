@@ -6662,9 +6662,8 @@ exports.displayMap = displayMap;
 /* eslint-disable no-undef */
 // https://www.mapbox.com/
 // https://docs.mapbox.com/
-console.log('hello from the client side'); // const locations = JSON.parse(document.getElementById('map').dataset.locations);
+// const locations = JSON.parse(document.getElementById('map').dataset.locations);
 // console.log(locations);
-
 function displayMap(locations) {
   // console.log(locations);
   mapboxgl.accessToken = 'pk.eyJ1IjoiYmJyZXZpayIsImEiOiJja25udjM3cHQwYWV0MzBwZ21jbm0wNjllIn0.r25WK2_IRVdPl-E3k9jh-g';
@@ -8316,8 +8315,11 @@ function _login() {
             _context2.next = 3;
             return (0, _axios.default)({
               method: 'POST',
+              // the form type
               url: 'http://localhost:3000/app/users/login',
+              // the path to the url
               data: {
+                // the data that is being passed
                 email: email,
                 password: password
               }
@@ -8677,7 +8679,9 @@ if (mapBox) {
 if (loginForm) loginForm.addEventListener('submit', function (item) {
   item.preventDefault();
   var email = document.getElementById('email').value;
-  var password = document.getElementById('password').value;
+  var password = document.getElementById('password').value; // console.log(email);
+  //   console.log(password);
+
   (0, _login.login)(email, password);
 });
 if (logOutBtn) logOutBtn.addEventListener('click', _login.logout);

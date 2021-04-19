@@ -2,9 +2,7 @@ const BLTour = require('../models/tourModel');
 const User = require('../models/userModel');
 
 exports.loginPage = (req, res, next) => {
-  res.render('login', {
-    title: 'Login',
-  });
+  res.render('login');
 };
 
 exports.overviewPage = async (req, res, next) => {

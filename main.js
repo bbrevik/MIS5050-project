@@ -56,7 +56,6 @@ app.use(express.urlencoded({ extended: false }));
  */
 
 // helmet is used for setting http security  https://github.com/helmetjs/helmet Helmet is a collection of 14 smaller middleware(s)
-app.use(cookieParser());
 
 // This middleware will be used for development reasons only it will log http requests
 if (process.env.NODE_ENV === 'development') {
@@ -68,7 +67,7 @@ if (process.env.NODE_ENV === 'development') {
  *  is a method built in express to recognize the incoming Request Object as a JSON Object
  */
 app.use(express.json());
-
+app.use(cookieParser()); // this will parse all the cookies f rom the incoming request
 // This is a test middleware function
 // app.use((request, response, next) => {
 //   console.log('middleware being executed');

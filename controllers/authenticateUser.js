@@ -1,6 +1,7 @@
 /* eslint-disable arrow-body-style */
 
 const util = require('util');
+const { promisify } = require('util');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
@@ -43,13 +44,12 @@ module.exports = {
     }
   },
 
+  // this function is for validating the user for rendering pages
   isUserLoggedIn: async (req, res, next) => {
-    try {
-      // See if the user has a token
-
-      if (req.cookies.jwt) {
+    if (req.cookies.jwt) {
+      try {
         // Verification if the users token is expired
-        const userData = await util.promisify(jwt.verify)(
+        const userData = await promisify(jwt.verify)(
           req.cookies.jwt,
           process.env.JWT_SECRET
         );
@@ -68,14 +68,14 @@ module.exports = {
         }
 
         // The user should have access to the route
+        // console.log(loggedInUser);
         res.locals.user = loggedInUser;
         return next();
+      } catch (error) {
+        next(error);
       }
-
-      next();
-    } catch (error) {
-      next(error);
     }
+    next();
   },
 
   authCheck: async (req, res, next) => {
@@ -110,7 +110,7 @@ module.exports = {
       if (!loggedInUser) {
         return next(new Error('The user no longer exists in the database.'));
       }
-
+      console.log(loggedInUser);
       // Check to see if the user has changed their password after the token was created
       // iat is issued at so the userData issued at
       if (loggedInUser.passwordChangedAfterToken(userData.iat)) {

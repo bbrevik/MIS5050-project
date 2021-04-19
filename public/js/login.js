@@ -4,9 +4,10 @@ import axios from 'axios';
 export async function login(email, password) {
   try {
     const res = await axios({
-      method: 'POST',
-      url: 'http://localhost:3000/app/users/login',
+      method: 'POST', // the form type
+      url: 'http://localhost:3000/app/users/login', // the path to the url
       data: {
+        // the data that is being passed
         email,
         password,
       },
