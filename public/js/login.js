@@ -1,7 +1,7 @@
 /* eslint-disable */
 import axios from 'axios';
 
-export const login = async (email, password) => {
+export async function login(email, password) {
   try {
     const res = await axios({
       method: 'POST',
@@ -15,12 +15,12 @@ export const login = async (email, password) => {
     if (res.data.status === 'success') {
       window.setTimeout(() => {
         location.assign('/');
-      }, 1500);
+      }, 500);
     }
   } catch (error) {
     console.log(error);
   }
-};
+}
 
 export const logout = async () => {
   try {

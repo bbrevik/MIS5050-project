@@ -6657,49 +6657,51 @@ try {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.displayMap = void 0;
+exports.displayMap = displayMap;
 
 /* eslint-disable no-undef */
 // https://www.mapbox.com/
 // https://docs.mapbox.com/
-// const allLocations = JSON.parse(document.getElementById('map').dataset.allLocations);
-// console.log(allLocations);
-var displayMap = function displayMap(allLocations) {
-  // console.log(allLocations);
+console.log('hello from the client side'); // const locations = JSON.parse(document.getElementById('map').dataset.locations);
+// console.log(locations);
+
+function displayMap(locations) {
+  // console.log(locations);
   mapboxgl.accessToken = 'pk.eyJ1IjoiYmJyZXZpayIsImEiOiJja25udjM3cHQwYWV0MzBwZ21jbm0wNjllIn0.r25WK2_IRVdPl-E3k9jh-g';
   var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/bbrevik/ckno1ge292k0317ud4jphg3vw',
+    zoom: 3,
     scrollZoom: false
   });
-  var bounds = new mapboxgl.LngLatBounds();
-  allLocations.forEach(function (location) {
+  var bounds = new mapboxgl.LngLatBounds(); // need to create a pin for the map
+
+  locations.forEach(function (x) {
     // Create marker
-    var item = document.createElement('div');
-    item.className = 'marker'; // Add a marker to the map
+    var point = document.createElement('div');
+    point.className = 'marker'; // Add a marker to the map
 
     new mapboxgl.Marker({
-      element: item,
+      element: point,
       anchor: 'bottom'
-    }).setLngLat(location.coordinates).addTo(map); // set a popup with information where the marker is
+    }).setLngLat(x.coordinates).addTo(map); // set a popup with information where the marker is
 
     new mapboxgl.Popup({
-      offset: 30
-    }).setLngLat(location.coordinates).setHTML("<p>Day ".concat(location.day, ": ").concat(location.description, "</p>")).addTo(map); // Extend map bounds to include current location
+      offset: 25
+    }).setLngLat(x.coordinates).setHTML("<p>Day ".concat(x.day, ": ").concat(x.description, "</p>")).addTo(map); // Extend map bounds to include current location
 
-    bounds.extend(location.coordinates);
-  });
+    bounds.extend(x.coordinates);
+  }); // this is the bounds of the points and will add padding to show the points on the map
+
   map.fitBounds(bounds, {
     padding: {
-      top: 150,
-      bottom: 120,
+      top: 220,
+      bottom: 220,
       left: 115,
       right: 115
     }
   });
-};
-
-exports.displayMap = displayMap;
+}
 },{}],"../../node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
 'use strict';
 
@@ -8288,7 +8290,8 @@ module.exports = require('./lib/axios');
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logout = exports.login = void 0;
+exports.login = login;
+exports.logout = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -8298,15 +8301,19 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var login = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(email, password) {
+function login(_x, _x2) {
+  return _login.apply(this, arguments);
+}
+
+function _login() {
+  _login = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(email, password) {
     var res;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
-        switch (_context.prev = _context.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
-            _context.prev = 0;
-            _context.next = 3;
+            _context2.prev = 0;
+            _context2.next = 3;
             return (0, _axios.default)({
               method: 'POST',
               url: 'http://localhost:3000/app/users/login',
@@ -8317,21 +8324,56 @@ var login = /*#__PURE__*/function () {
             });
 
           case 3:
-            res = _context.sent;
+            res = _context2.sent;
 
             if (res.data.status === 'success') {
               window.setTimeout(function () {
                 location.assign('/');
-              }, 1500);
+              }, 500);
             }
 
+            _context2.next = 10;
+            break;
+
+          case 7:
+            _context2.prev = 7;
+            _context2.t0 = _context2["catch"](0);
+            console.log(_context2.t0);
+
+          case 10:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 7]]);
+  }));
+  return _login.apply(this, arguments);
+}
+
+var logout = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var res;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            _context.next = 3;
+            return (0, _axios.default)({
+              method: 'GET',
+              url: 'http://localhost:3000/app/users/logout'
+            });
+
+          case 3:
+            res = _context.sent;
+            if (res.data.status = 'success') location.reload(true);
             _context.next = 10;
             break;
 
           case 7:
             _context.prev = 7;
             _context.t0 = _context["catch"](0);
-            console.log(_context.t0);
+            console.log(_context.t0.response);
 
           case 10:
           case "end":
@@ -8341,48 +8383,8 @@ var login = /*#__PURE__*/function () {
     }, _callee, null, [[0, 7]]);
   }));
 
-  return function login(_x, _x2) {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-exports.login = login;
-
-var logout = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-    var res;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
-            return (0, _axios.default)({
-              method: 'GET',
-              url: 'http://localhost:3000/app/users/logout'
-            });
-
-          case 3:
-            res = _context2.sent;
-            if (res.data.status = 'success') location.reload(true);
-            _context2.next = 10;
-            break;
-
-          case 7:
-            _context2.prev = 7;
-            _context2.t0 = _context2["catch"](0);
-            console.log(_context2.t0.response);
-
-          case 10:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2, null, [[0, 7]]);
-  }));
-
   return function logout() {
-    return _ref2.apply(this, arguments);
+    return _ref.apply(this, arguments);
   };
 }();
 
@@ -8672,15 +8674,15 @@ if (mapBox) {
   (0, _mapbox.displayMap)(allLocations);
 }
 
-if (loginForm) loginForm.addEventListener('submit', function (e) {
-  e.preventDefault();
+if (loginForm) loginForm.addEventListener('submit', function (item) {
+  item.preventDefault();
   var email = document.getElementById('email').value;
   var password = document.getElementById('password').value;
   (0, _login.login)(email, password);
 });
 if (logOutBtn) logOutBtn.addEventListener('click', _login.logout);
-if (userDataForm) userDataForm.addEventListener('submit', function (e) {
-  e.preventDefault();
+if (userDataForm) userDataForm.addEventListener('submit', function (item) {
+  item.preventDefault();
   var name = document.getElementById('name').value;
   var email = document.getElementById('email').value;
   updateSettings({
@@ -8689,13 +8691,13 @@ if (userDataForm) userDataForm.addEventListener('submit', function (e) {
   }, 'data');
 });
 if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(item) {
     var passwordCurrent, password, passwordConfirm;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            e.preventDefault();
+            item.preventDefault();
             document.querySelector('.btn--save-password').textContent = 'Updating...';
             passwordCurrent = document.getElementById('password-current').value;
             password = document.getElementById('password').value;

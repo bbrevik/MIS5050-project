@@ -34,16 +34,18 @@ reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 // This will calculate the average ratings for a tour
 reviewSchema.statics.averageRatings = async function (tourId) {
   const statistics = await this.aggregate([
-    { $match: { tour: tourId } },
+    {
+      $match: { tour: tourId },
+    },
     {
       $group: {
         _id: '$tour',
-        numberOfRatings: { $sum: 1 }, // getting the number of ratings
-        averageRating: { $avg: '$rating' }, // looking at the rating field in the model and averaging it out
+        nRating: { $sum: 1 },
+        avgRating: { $avg: '$rating' },
       },
     },
   ]);
-  // console.log(statistics);
+
   if (statistics.length > 0) {
     await BLTour.findByIdAndUpdate(tourId, {
       ratingsQuantity: statistics[0].numberOfRatings,

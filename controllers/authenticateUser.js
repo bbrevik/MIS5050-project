@@ -23,7 +23,12 @@ module.exports = {
   // sign up a new user
   signup: async (req, res, next) => {
     try {
-      const createdUser = await User.create(req.body);
+      const createdUser = await User.create({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        passwordConfirm: req.body.passwordConfirm,
+      });
       const userToken = signToken(createdUser.id);
       res.cookie('jwt', userToken, jwtCookie);
       res.json({
@@ -66,6 +71,7 @@ module.exports = {
         res.locals.user = loggedInUser;
         return next();
       }
+
       next();
     } catch (error) {
       next(error);
@@ -92,7 +98,7 @@ module.exports = {
         );
       }
 
-      // Verification if the users token is expired
+      // Verification if the users token is expire
       const userData = await util.promisify(jwt.verify)(
         usersToken,
         process.env.JWT_SECRET
@@ -118,7 +124,7 @@ module.exports = {
       next(error);
     }
   },
-
+  // should have been validate user type
   validateIsAdmin: (...role) => {
     return (req, res, next) => {
       // check the type of user
@@ -183,12 +189,16 @@ module.exports = {
       if (!user || !correctPassword) {
         return next(new Error('The email or password if not correct.'));
       }
-      // send web token is everything passes
+
+      res.locals.user = user;
+      // send web token if everything passes
+      console.log('here', user);
       const userToken = signToken(user._id);
       res.cookie('jwt', userToken, jwtCookie);
       res.json({
         status: 'success',
         userToken,
+        user,
       });
     } catch (error) {
       next(error);

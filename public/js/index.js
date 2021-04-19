@@ -17,8 +17,8 @@ if (mapBox) {
 }
 
 if (loginForm)
-  loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+  loginForm.addEventListener('submit', (item) => {
+    item.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     login(email, password);
@@ -27,16 +27,16 @@ if (loginForm)
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
 
 if (userDataForm)
-  userDataForm.addEventListener('submit', (e) => {
-    e.preventDefault();
+  userDataForm.addEventListener('submit', (item) => {
+    item.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     updateSettings({ name, email }, 'data');
   });
 
 if (userPasswordForm)
-  userPasswordForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  userPasswordForm.addEventListener('submit', async (item) => {
+    item.preventDefault();
     document.querySelector('.btn--save-password').textContent = 'Updating...';
 
     const passwordCurrent = document.getElementById('password-current').value;

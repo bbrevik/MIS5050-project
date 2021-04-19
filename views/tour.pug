@@ -15,13 +15,13 @@ mixin overviewSection(label,icon,  text)
 mixin reviewSection(review)
   .reviews__card
     .reviews__avatar
-      img.reviews__avatar-img(src=`/img/users/${review.user.photo}`, alt=`${review.user.name}`)
+      img.reviews__avatar-img(src=`/images/users/${review.user.photo}`, alt=`${review.user.name}`)
       h6.reviews__user= review.user.name
     p.reviews__text= review.review
     .reviews__rating
       each star in [1, 2, 3, 4, 5]
         svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
-          use(xlink:href='/img/icons.svg#icon-star')
+          use(xlink:href='/images/icons.svg#icon-star')
 
 block content
   section.section-header
@@ -68,47 +68,45 @@ block content
   section.section-pictures
     each image, i in bltour.otherTourImages
       .picture-box
-        img.picture-box__img(src=`/images/tours/${image}`, class=`picture-box__img--${i + 1}` alt="alt")
+        img.picture-box__img(src=`/images/tours/${image}`, ,class=`picture-box__img--${i + 1}` alt="alt")
 
   section.section-map
     #map(data-locations=`${JSON.stringify(bltour.allLocations)}`)
+
+  //- section.section-reviews
+  //-   .reviews
+  //-     .reviews__card
+  //-       .reviews__avatar
+  //-         img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='alt')
+  //-         h6.reviews__user Jenny Larson
+  //-       p.reviews__text Still need o populate the reviews section
+  //-       .reviews__rating
+  //-         svg.reviews__star.reviews__star--active
+  //-           use(xlink:href='/images/icons.svg#icon-star')
+  //-         svg.reviews__star.reviews__star--active
+  //-           use(xlink:href='/images/icons.svg#icon-star')
+  //-         svg.reviews__star.reviews__star--active
+  //-           use(xlink:href='/images/icons.svg#icon-star')
+  //-         svg.reviews__star.reviews__star--active
+  //-           use(xlink:href='/images/icons.svg#icon-star')
+  //-     .reviews__card
+  //-         .reviews__avatar
+  //-           img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='alt')
+  //-           h6.reviews__user Jenny Larson
+  //-         p.reviews__text Still need to populate the reviews section
+  //-         .reviews__rating
+  //-           svg.reviews__star.reviews__star--active
+  //-             use(xlink:href='/images/icons.svg#icon-star')
+  //-           svg.reviews__star.reviews__star--active
+  //-             use(xlink:href='/images/icons.svg#icon-star')
+  //-           svg.reviews__star.reviews__star--active
+  //-             use(xlink:href='/images/icons.svg#icon-star')
+  //-           svg.reviews__star.reviews__star--active
+  //-             use(xlink:href='/images/icons.svg#icon-star')
   section.section-reviews
     .reviews
-      .reviews__card
-        .reviews__avatar
-          img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='alt')
-          h6.reviews__user Jenny Larson
-        p.reviews__text Still need o populate the reviews section
-        .reviews__rating
-          svg.reviews__star.reviews__star--active
-            use(xlink:href='/images/icons.svg#icon-star')
-          svg.reviews__star.reviews__star--active
-            use(xlink:href='/images/icons.svg#icon-star')
-          svg.reviews__star.reviews__star--active
-            use(xlink:href='/images/icons.svg#icon-star')
-          svg.reviews__star.reviews__star--active
-            use(xlink:href='/images/icons.svg#icon-star')
-      .reviews__card
-          .reviews__avatar
-            img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='alt')
-            h6.reviews__user Jenny Larson
-          p.reviews__text Still need to populate the reviews section
-          .reviews__rating
-            svg.reviews__star.reviews__star--active
-              use(xlink:href='/images/icons.svg#icon-star')
-            svg.reviews__star.reviews__star--active
-              use(xlink:href='/images/icons.svg#icon-star')
-            svg.reviews__star.reviews__star--active
-              use(xlink:href='/images/icons.svg#icon-star')
-            svg.reviews__star.reviews__star--active
-              use(xlink:href='/images/icons.svg#icon-star')
-    
-  
-
-  
-  //-   .reviews
-  //-     each review in bltour.reviews
-  //-       +reviewSection(review)
+      each review in bltour.reviews
+        +reviewSection(review)
 
   section.section-cta
     .cta

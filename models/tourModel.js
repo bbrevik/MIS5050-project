@@ -77,11 +77,11 @@ const blTourSchema = new mongoose.Schema(
           type: String,
           default: 'Point',
           enum: ['Point'],
-          address: String,
-          description: String,
-          coordinates: [Number],
-          day: Number,
         },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
       },
     ],
     vipTour: {
@@ -108,6 +108,8 @@ const blTourSchema = new mongoose.Schema(
   }
 );
 
+blTourSchema.index({ slug: 1 });
+blTourSchema.index({ price: 1, ratingsAverage: -1 });
 blTourSchema.index({ startingPoint: '2dsphere' });
 
 blTourSchema.virtual('reviews', {
@@ -177,12 +179,12 @@ blTourSchema.pre('save', function (next) {
 //     select: '-__v -passwordChangedAt'
 //   });
 
-blTourSchema.pre(/^find/, function (next) {
-  this.find({ vipTour: { $ne: true } });
+// blTourSchema.pre(/^find/, function (next) {
+//   this.find({ vipTour: { $ne: true } });
 
-  this.start = Date.now();
-  next();
-});
+//   this.start = Date.now();
+//   next();
+// });
 
 // This will allow to populate the guides on the tour page
 blTourSchema.pre(/^find/, function (next) {

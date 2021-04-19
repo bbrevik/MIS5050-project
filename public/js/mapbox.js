@@ -2,53 +2,56 @@
 // https://www.mapbox.com/
 
 // https://docs.mapbox.com/
+console.log('hello from the client side');
 
-// const allLocations = JSON.parse(document.getElementById('map').dataset.allLocations);
-// console.log(allLocations);
-export const displayMap = (allLocations) => {
-  // console.log(allLocations);
+// const locations = JSON.parse(document.getElementById('map').dataset.locations);
+// console.log(locations);
+export function displayMap(locations) {
+  // console.log(locations);
   mapboxgl.accessToken =
     'pk.eyJ1IjoiYmJyZXZpayIsImEiOiJja25udjM3cHQwYWV0MzBwZ21jbm0wNjllIn0.r25WK2_IRVdPl-E3k9jh-g';
 
   let map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/bbrevik/ckno1ge292k0317ud4jphg3vw',
+    zoom: 3,
     scrollZoom: false,
   });
 
   const bounds = new mapboxgl.LngLatBounds();
 
-  allLocations.forEach((location) => {
+  // need to create a pin for the map
+  locations.forEach((x) => {
     // Create marker
-    const item = document.createElement('div');
-    item.className = 'marker';
+    const point = document.createElement('div');
+    point.className = 'marker';
 
     // Add a marker to the map
     new mapboxgl.Marker({
-      element: item,
+      element: point,
       anchor: 'bottom',
     })
-      .setLngLat(location.coordinates)
+      .setLngLat(x.coordinates)
       .addTo(map);
 
     // set a popup with information where the marker is
     new mapboxgl.Popup({
-      offset: 30,
+      offset: 25,
     })
-      .setLngLat(location.coordinates)
-      .setHTML(`<p>Day ${location.day}: ${location.description}</p>`)
+      .setLngLat(x.coordinates)
+      .setHTML(`<p>Day ${x.day}: ${x.description}</p>`)
       .addTo(map);
 
     // Extend map bounds to include current location
-    bounds.extend(location.coordinates);
+    bounds.extend(x.coordinates);
   });
-
+  // this is the bounds of the points and will add padding to show the points on the map
   map.fitBounds(bounds, {
     padding: {
-      top: 150,
-      bottom: 120,
+      top: 220,
+      bottom: 220,
       left: 115,
       right: 115,
     },
   });
-};
+}
