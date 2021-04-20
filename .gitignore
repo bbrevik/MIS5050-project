@@ -16,7 +16,7 @@ node_modules/
 # OS or Editor folders
 .DS_Store
 Thumbs.db
-.cache
+.cache/
 .project
 .settings
 .tmproj
