@@ -12,6 +12,7 @@ const authenticateUser = require('../controllers/authenticateUser');
 const router = express.Router();
 
 const homeController = require('../controllers/homeController');
+// const tourController = require('../controllers/tourController');
 
 router.use(authenticateUser.isUserLoggedIn);
 
@@ -29,6 +30,7 @@ router.post(
 router.get('/tour/:slug', homeController.tourPage);
 router.get('/login', homeController.loginPage);
 router.get('/settings', authenticateUser.authCheck, homeController.userAccount);
+
 router.get(
   '/manage-users',
   authenticateUser.authCheck,

@@ -13,18 +13,19 @@ block content
       nav.user-view__menu
         ul.side-nav
           +userNav('/settings', 'Settings', 'settings', true)
-          +userNav('/my-tours', 'My bookings', 'briefcase')
-          +userNav('#', 'My reviews', 'star')
+          +userNav('/app/tours/top-three', 'Our Top Three Tours', 'thumbs-up')
+          +userNav('/app/tours/my-tours', 'My bookings', 'briefcase')
+          +userNav('/app/reviews/my-reviews', 'My reviews', 'star')
           +userNav('#', 'Billing', 'credit-card')
 
         - if (user.role === 'admin')
           .admin-nav
             h5.admin-nav__heading Admin
             ul.side-nav
-              +userNav('/manage-tours', 'Manage tours', 'map')
+              +userNav('/app/tours/manage-tours', 'Manage tours', 'map')
               +userNav('/manage-users', 'Manage users', 'users')
-              +userNav('/manage-reviews', 'Manage reviews', 'star')
-              +userNav('/manage-bookings', 'Manage bookings', 'briefcase')
+              +userNav('/app/reviews/manage-reviews', 'Manage reviews', 'star')
+              +userNav('/app/bookings/manage-bookings', 'Manage bookings', 'briefcase')
 
       .user-view__content
         .user-view__form-container

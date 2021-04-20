@@ -27,7 +27,7 @@ router.use('/:tourId/reviews', reviewRouter);
 
 router.route('/tour-stats').get(tourController.getBucketListStats);
 router
-  .route('/top-ten')
+  .route('/top-three')
   .get(tourController.bltTopTours, tourController.getAllBLTours);
 
 router
@@ -36,6 +36,11 @@ router
 router
   .route('/toursWithin/:dis/center/:userLocation/unit/:unit')
   .get(tourController.getWithinDist);
+
+router
+  .route('/manage-tours')
+  .get(tourController.getAllBLTours)
+  .post(tourController.createBLTour);
 
 router
   .route('/')

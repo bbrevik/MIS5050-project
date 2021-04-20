@@ -11,6 +11,14 @@ const router = express.Router({ mergeParams: true });
 router.use(authenticateUser.authCheck); // make sure the user is authenticated
 
 router
+  .route('/manage-reviews')
+  .get(reviewController.getAllReviews)
+  .post(
+    authenticateUser.validateIsAdmin('user'),
+    reviewController.createReview
+  );
+
+router
   .route('/')
   .get(reviewController.getAllReviews)
   .post(
