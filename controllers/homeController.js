@@ -18,6 +18,17 @@ exports.overviewPage = async (req, res, next) => {
   }
 };
 
+exports.manageUsersInfo = async (req, res, next) => {
+  try {
+    const users = await User.find();
+    res.render('manageUsers', {
+      users,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.updateUserInfo = async (req, res, next) => {
   try {
     // console.log('updating user', req.body);

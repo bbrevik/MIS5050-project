@@ -1,0 +1,25 @@
+mixin userNav(link, text, icon, active)
+  li(class=`${active ? 'side-nav--active' : ''}`)
+    a(href=`${link}`)
+      svg
+        use(xlink:href=`images/icons.svg#icon-${icon}`)
+      | #{text}
+
+
+  main.main
+    .user-view
+      nav.user-view__menu
+        ul.side-nav
+          +userNav('/', 'Settings', 'settings', true)
+          +userNav('/my-tours', 'My bookings', 'briefcase')
+          +userNav('/', 'My reviews', 'star')
+          +userNav('/', 'Billing', 'credit-card')
+
+        - if (user.role === 'admin')
+          .admin-nav
+            h5.admin-nav__heading Admin
+            ul.side-nav
+              +userNav('/manage-tours', 'Manage tours', 'map')
+              +userNav('/manage-users', 'Manage users', 'users')
+              +userNav('/manage-reviews', 'Manage reviews', 'star')
+              +userNav('/manage-bookings', 'Manage bookings', 'briefcase')

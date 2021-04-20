@@ -1,0 +1,26 @@
+extends layout
+block content
+  main.main
+    .card-container
+      each user in users
+        .card
+          .card__header
+            .card__picture
+
+              img.card__picture-img(src=`/images/users/${user.photo}` alt=``)
+            h3.heading-tertirary
+              span= user.role
+          .card__details
+            p.card__text= user.userSummary
+            .card__data
+              svg.card__icon
+                use(xlink:href='/images/icons.svg#icon-map-pin')
+              span= user.email
+            .card__data
+              svg.card__icon
+                use(xlink:href='/images/icons.svg#icon-user')
+              span= `${user.name}`
+
+          .card__footer
+
+            a.btn.btn--green.btn--small(href=`/user/${user.id}`) Details

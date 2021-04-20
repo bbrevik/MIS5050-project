@@ -12,7 +12,7 @@ block content
     .user-view
       nav.user-view__menu
         ul.side-nav
-          +userNav('#', 'Settings', 'settings', true)
+          +userNav('/settings', 'Settings', 'settings', true)
           +userNav('/my-tours', 'My bookings', 'briefcase')
           +userNav('#', 'My reviews', 'star')
           +userNav('#', 'Billing', 'credit-card')
@@ -21,10 +21,10 @@ block content
           .admin-nav
             h5.admin-nav__heading Admin
             ul.side-nav
-              +userNav('#', 'Manage tours', 'map')
-              +userNav('#', 'Manage users', 'users')
-              +userNav('#', 'Manage reviews', 'star')
-              +userNav('#', 'Manage bookings', 'briefcase')
+              +userNav('/manage-tours', 'Manage tours', 'map')
+              +userNav('/manage-users', 'Manage users', 'users')
+              +userNav('/manage-reviews', 'Manage reviews', 'star')
+              +userNav('/manage-bookings', 'Manage bookings', 'briefcase')
 
       .user-view__content
         .user-view__form-container
@@ -37,6 +37,7 @@ block content
             .form__group.ma-bt-md
               label.form__label(for='email') Email address
               input#email.form__input(type='email', value=`${user.email}`, required, name='email')
+            .form__group.ma-bt-md
             .form__group.form__photo-upload
               img.form__user-photo(src=`/images/users/${user.photo}`, alt='User photo')
               input.form__upload(type='file', accept='image/*', id='photo', name='photo')
