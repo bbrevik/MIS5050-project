@@ -29,8 +29,6 @@ const reviewSchema = new mongoose.Schema(
 // Here we are setting up indexing on the mongoDB so a user can add 1 review per tour
 // We are doing this as if we mark the tour model as unique for a review then only one review can be added to a tour
 // to fix that we need to set indexing
-reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
-
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'tour',

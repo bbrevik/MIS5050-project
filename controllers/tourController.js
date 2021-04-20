@@ -14,7 +14,15 @@ const crud = require('./crudController');
 
 exports.bltTopTours = async (request, response, next) => {
   request.query.limit = '3';
-  request.query.sort = '-tourRatingAverage, price';
+  request.query.sort = '-tourRatingAverage';
+  request.query.fields =
+    'name, price, tourRatingAverage, tourSummary, difficulty';
+  next();
+};
+
+exports.bltCheapTours = async (request, response, next) => {
+  request.query.limit = '5';
+  request.query.sort = 'price, -tourRatingAverage';
   request.query.fields =
     'name, price, tourRatingAverage, tourSummary, difficulty';
   next();

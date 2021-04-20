@@ -31,6 +31,10 @@ router
   .get(tourController.bltTopTours, tourController.getAllBLTours);
 
 router
+  .route('/cheap-five')
+  .get(tourController.bltCheapTours, tourController.getAllBLTours);
+
+router
   .route('/distances/:userLocation/unit/:unit')
   .get(tourController.getDistanceToTours);
 router

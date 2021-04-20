@@ -13,7 +13,9 @@ block content
       nav.user-view__menu
         ul.side-nav
           +userNav('/settings', 'Settings', 'settings', true)
+          +userNav('/', 'All tours', 'droplet')
           +userNav('/app/tours/top-three', 'Our Top Three Tours', 'thumbs-up')
+          +userNav('/app/tours/cheap-five', 'Our Top Cheap Tours', 'dollar-sign')
           +userNav('/app/tours/my-tours', 'My bookings', 'briefcase')
           +userNav('/app/reviews/my-reviews', 'My reviews', 'star')
           +userNav('#', 'Billing', 'credit-card')
