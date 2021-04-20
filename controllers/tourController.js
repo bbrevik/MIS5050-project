@@ -10,21 +10,20 @@ const BLTour = require('../models/tourModel');
 const APIProperties = require('../reusableCode/apiProperties');
 // eslint-disable-next-line no-unused-vars
 const User = require('../models/userModel');
-const crud = require('./crudController');
 
 exports.bltTopTours = async (request, response, next) => {
   request.query.limit = '3';
   request.query.sort = '-tourRatingAverage';
   request.query.fields =
-    'name, price, tourRatingAverage, tourSummary, difficulty';
+    'name, tourRatingAverage, price, tourSummary, difficulty';
   next();
 };
 
 exports.bltCheapTours = async (request, response, next) => {
   request.query.limit = '5';
-  request.query.sort = 'price, -tourRatingAverage';
+  request.query.sort = 'price';
   request.query.fields =
-    'name, price, tourRatingAverage, tourSummary, difficulty';
+    'name, price,tourSummary, tourRatingAverage,  difficulty';
   next();
 };
 
@@ -102,11 +101,15 @@ exports.getDistanceToTours = async (req, res, next) => {
     const { userLocation, unit } = req.params;
     userLocation.split(',');
     const [latitude, longitude] = userLocation.split(',');
-
+    // depending on unit type convert mi or km
     const distFix = unit === 'mi' ? 0.000621371 : 0.001;
 
     if ((!latitude, !longitude)) {
-      return next(new Error('You do not have the location entered correctly.'));
+      return next(
+        new Error(
+          'There is something wrong with the location coordinates you entered.'
+        )
+      );
     }
 
     const distances = await BLTour.aggregate([
@@ -208,24 +211,24 @@ exports.updateBLTour = async (request, response, next) => {
   }
 };
 
-exports.deleteBLTour = crud.deleteItem(BLTour);
+// delete a tour function
 
-// exports.deleteBLTour = async (request, response, next) => {
-//   try {
-//     const deleteTour = await BLTour.findByIdAndDelete(request.params.id);
+exports.deleteBLTour = async (request, response, next) => {
+  try {
+    const deleteTour = await BLTour.findByIdAndDelete(request.params.id);
 
-//     if (!deleteTour) {
-//       response.render('errors/404');
-//     }
+    if (!deleteTour) {
+      response.render('errors/404');
+    }
 
-//     response.json({
-//       status: 'success',
-//       data: null,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    response.json({
+      status: 'success',
+      data: null,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 /**
  * https://docs.mongodb.com/manual/aggregation/

@@ -11,7 +11,7 @@ class APIProperties {
     const fieldsToExclude = ['page', 'sort', 'limit', 'fields']; // these are the fields we need to exclude
     fieldsToExclude.forEach((item) => delete queryObject[item]); // removing all the fields from the object looping over if it exist
 
-    // {better filtering} gte, gt, let, lt need to be handled
+    // {better filtering} gte, gt, let, lt need to be handled ie greater than equal, greater than, less then equal...
     let toursString = JSON.stringify(queryObject);
     toursString = toursString.replace(
       /\b(gte|lte|gt|lt)\b/g,
