@@ -31,7 +31,7 @@ const express = require('express');
 const morgan = require('morgan');
 // const layouts = require('express-ejs-layouts');
 const path = require('path');
-const helmet = require('helmet');
+// const helmet = require('helmet');
 // eslint-disable-next-line no-unused-vars
 const cookieParser = require('cookie-parser');
 // const homeController = require('./controllers/homeController');
@@ -47,7 +47,6 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({ extended: false }));
 
 /**
  * This is the applications middleware functions
@@ -68,6 +67,8 @@ if (process.env.NODE_ENV === 'development') {
  */
 app.use(express.json());
 app.use(cookieParser()); // this will parse all the cookies f rom the incoming request
+app.use(express.urlencoded({ extended: true }));
+
 // This is a test middleware function
 // app.use((request, response, next) => {
 //   console.log('middleware being executed');

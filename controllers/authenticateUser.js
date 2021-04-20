@@ -32,13 +32,7 @@ module.exports = {
       });
       const userToken = signToken(createdUser.id);
       res.cookie('jwt', userToken, jwtCookie);
-      res.json({
-        status: 'success',
-        userToken,
-        data: {
-          user: createdUser,
-        },
-      });
+      next();
     } catch (error) {
       next(error);
     }
@@ -119,6 +113,7 @@ module.exports = {
 
       // The user should have access to the route
       req.user = loggedInUser;
+      res.locals.user = loggedInUser;
       next();
     } catch (error) {
       next(error);

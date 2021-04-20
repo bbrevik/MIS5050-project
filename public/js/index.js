@@ -28,14 +28,6 @@ if (loginForm)
 
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
 
-if (userDataForm)
-  userDataForm.addEventListener('submit', (item) => {
-    item.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    updateSettings({ name, email }, 'data');
-  });
-
 if (userPasswordForm)
   userPasswordForm.addEventListener('submit', async (item) => {
     item.preventDefault();

@@ -8685,15 +8685,6 @@ if (loginForm) loginForm.addEventListener('submit', function (item) {
   (0, _login.login)(email, password);
 });
 if (logOutBtn) logOutBtn.addEventListener('click', _login.logout);
-if (userDataForm) userDataForm.addEventListener('submit', function (item) {
-  item.preventDefault();
-  var name = document.getElementById('name').value;
-  var email = document.getElementById('email').value;
-  updateSettings({
-    name: name,
-    email: email
-  }, 'data');
-});
 if (userPasswordForm) userPasswordForm.addEventListener('submit', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(item) {
     var passwordCurrent, password, passwordConfirm;

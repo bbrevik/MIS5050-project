@@ -18,6 +18,39 @@ exports.overviewPage = async (req, res, next) => {
   }
 };
 
+exports.updateUserInfo = async (req, res, next) => {
+  try {
+    // console.log('updating user', req.body);
+    const currentUser = await User.findByIdAndUpdate(
+      req.user.id,
+      {
+        name: req.body.name,
+        email: req.body.email,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    console.log('Name: ', currentUser.email);
+    console.log('id: ', currentUser.name);
+
+    res.render('settings', {
+      user: currentUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.signupPage = async (req, res, next) => {
+  res.render('signup');
+};
+
+exports.userAccount = async (req, res, next) => {
+  res.render('settings');
+};
+
 exports.tourPage = async (req, res, next) => {
   try {
     const bltour = await BLTour.findOne({ slug: req.params.slug }).populate({
