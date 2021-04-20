@@ -31,31 +31,39 @@ const reviewSchema = new mongoose.Schema(
 // to fix that we need to set indexing
 reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 
+reviewSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'tour',
+    select: 'name',
+  }).populate({
+    path: 'user',
+    select: 'name photo',
+  });
+  next();
+});
 // This will calculate the average ratings for a tour
 reviewSchema.statics.averageRatings = async function (tourId) {
   const statistics = await this.aggregate([
-    {
-      $match: { tour: tourId },
-    },
+    { $match: { tour: tourId } },
     {
       $group: {
         _id: '$tour',
-        numberOfRatings: { $sum: 1 },
-        averageRating: { $avg: '$rating' },
+        ratingsTotal: { $sum: 1 },
+        tourRatingAverage: { $avg: '$rating' },
       },
     },
   ]);
 
   if (statistics.length > 0) {
     await BLTour.findByIdAndUpdate(tourId, {
-      ratingsQuantity: statistics[0].numberOfRatings,
-      ratingsAverage: statistics[0].averageRating,
+      ratingsTotal: statistics[0].ratingsTotal,
+      tourRatingAverage: statistics[0].tourRatingAverage,
     });
   } else {
     // so if no statistics then set rating average to 4
     await BLTour.findByIdAndUpdate(tourId, {
-      ratingsQuantity: 0,
-      ratingsAverage: 4,
+      ratingsTotal: 0,
+      tourRatingAverage: 4,
     });
   }
 };
@@ -65,7 +73,7 @@ reviewSchema.post('save', function () {
   this.constructor.averageRatings(this.tour);
 });
 
-// this is how we are getting the current document from the database store it on the this.tourReview variable then execute / go to post below this function
+// this is how we are getting the current document from the database on the this.tourReview variable then execute / go to post below this function
 reviewSchema.pre(/^findOneAnd/, async function (next) {
   this.tourReview = await this.findOne();
   next();

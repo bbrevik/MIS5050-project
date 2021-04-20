@@ -55,7 +55,7 @@ exports.tourPage = async (req, res, next) => {
   try {
     const bltour = await BLTour.findOne({ slug: req.params.slug }).populate({
       path: 'reviews',
-      fields: 'user rating review',
+      fields: '',
     });
     // console.log(bltour);
 

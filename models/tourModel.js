@@ -108,8 +108,6 @@ const blTourSchema = new mongoose.Schema(
   }
 );
 
-blTourSchema.index({ slug: 1 });
-blTourSchema.index({ price: 1, ratingsAverage: -1 });
 blTourSchema.index({ startingPoint: '2dsphere' });
 
 blTourSchema.virtual('reviews', {
@@ -127,41 +125,14 @@ blTourSchema.virtual('reviews', {
  *
  * // DOCUMENT MIDDLEWARE: runs before .save() and .create()
  *
- * tourSchema.pre('save', function(next) {
- * this.slug = slugify(this.name, { lower: true });
- * next();
- * });
- *
- * schema.pre('save', function() {
- * return doStuff().
- * then(() => doMoreStuff());
- * });
- *
- * // Or, in Node.js >= 7.6.0:
- * schema.pre('save', async function() {
- * await doStuff();
- * await doMoreStuff();
- * });
- * This is document middleware from mongoose this will run
- * before  the save, and create
- *
- * `this` will point to the document that is being saved
- */
+ * */
+
 blTourSchema.pre('save', function (next) {
   // results from postman "slug": "tour-17", for tour 17
   this.slug = slugify(this.name, { lower: true });
   next();
 });
 
-// blTourSchema.pre('save', (next) => {
-//   console.log('need to save the document');
-//   next();
-// });
-
-// blTourSchema.post('save', (document, next) => {
-//   console.log(document);
-//   next();
-// });
 // ********************************/
 // QUERY MIDDLEWARE THIS will point at the current query not the current document like the document middleware
 //
@@ -172,32 +143,18 @@ blTourSchema.pre('save', function (next) {
 //   this.start = Date.now();
 //   next();
 // });
-//
-// tourSchema.pre(/^find/, function(next) {
-//   this.populate({
-//     path: 'guides',
-//     select: '-__v -passwordChangedAt'
-//   });
 
-// blTourSchema.pre(/^find/, function (next) {
-//   this.find({ vipTour: { $ne: true } });
-
-//   this.start = Date.now();
-//   next();
-// });
+blTourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
 
 // This will allow to populate the guides on the tour page
 blTourSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'guides',
   });
-  next();
-});
-
-blTourSchema.post(/^find/, function (docs, next) {
-  // console.log(docs);
-  console.log(`This query took ${Date.now() - this.start} in milliseconds.`);
-
   next();
 });
 
