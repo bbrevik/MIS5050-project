@@ -14,13 +14,16 @@ block content
             p.card__text= user.userSummary
             .card__data
               svg.card__icon
-                use(xlink:href='/images/icons.svg#icon-mail')
-              span=(a href=`${user.email}`)
+                use(xlink:href='/images/icons.svg#icon-user')
+              h4
+                span= `${user.name}`
             .card__data
               svg.card__icon
-                use(xlink:href='/images/icons.svg#icon-user')
-              span= `${user.name}`
-
+                use(xlink:href='/images/icons.svg#icon-mail')
+              a(href=`mailto:${user.email}`)              
+                span=user.email
           .card__footer
-
-            a.btn.btn--green.btn--small(href=`/user/${user.id}`) Details
+         
+            a.btn.btn--green.btn--small(href=`/user/${user.id}`) Update user information
+              
+          
