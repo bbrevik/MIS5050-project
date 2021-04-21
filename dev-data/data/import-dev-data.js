@@ -35,7 +35,7 @@ const importData = async () => {
   try {
     await Review.create(reviews);
     // await User.create(users, { validateBeforeSave: false });
-    await BLTour.create(tours);
+    //  await BLTour.create(tours);
     console.log('Data successfully loaded!');
   } catch (err) {
     console.log(err);
@@ -47,7 +47,7 @@ console.log('3');
 const deleteData = async () => {
   try {
     await Review.deleteMany();
-    await BLTour.deleteMany();
+    // await BLTour.deleteMany();
     /// await User.deleteMany();
     console.log('Data successfully deleted!');
   } catch (err) {
