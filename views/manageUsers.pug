@@ -14,8 +14,8 @@ block content
             p.card__text= user.userSummary
             .card__data
               svg.card__icon
-                use(xlink:href='/images/icons.svg#icon-map-pin')
-              span= user.email
+                use(xlink:href='/images/icons.svg#icon-mail')
+              span=(a href=`${user.email}`)
             .card__data
               svg.card__icon
                 use(xlink:href='/images/icons.svg#icon-user')

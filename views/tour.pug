@@ -1,8 +1,8 @@
 extends layout
 
 block append head
-  script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
-  link(href='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css' rel='stylesheet')
+  script(src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js')
+  link(href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet')
 
 
 mixin overviewSection(label,icon,  text)
@@ -72,37 +72,6 @@ block content
 
   section.section-map
     #map(data-locations=`${JSON.stringify(bltour.allLocations)}`)
-
-  //- section.section-reviews
-  //-   .reviews
-  //-     .reviews__card
-  //-       .reviews__avatar
-  //-         img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='alt')
-  //-         h6.reviews__user Jenny Larson
-  //-       p.reviews__text Still need o populate the reviews section
-  //-       .reviews__rating
-  //-         svg.reviews__star.reviews__star--active
-  //-           use(xlink:href='/images/icons.svg#icon-star')
-  //-         svg.reviews__star.reviews__star--active
-  //-           use(xlink:href='/images/icons.svg#icon-star')
-  //-         svg.reviews__star.reviews__star--active
-  //-           use(xlink:href='/images/icons.svg#icon-star')
-  //-         svg.reviews__star.reviews__star--active
-  //-           use(xlink:href='/images/icons.svg#icon-star')
-  //-     .reviews__card
-  //-         .reviews__avatar
-  //-           img.reviews__avatar-img(src='/images/users/user-7.jpg', alt='alt')
-  //-           h6.reviews__user Jenny Larson
-  //-         p.reviews__text Still need to populate the reviews section
-  //-         .reviews__rating
-  //-           svg.reviews__star.reviews__star--active
-  //-             use(xlink:href='/images/icons.svg#icon-star')
-  //-           svg.reviews__star.reviews__star--active
-  //-             use(xlink:href='/images/icons.svg#icon-star')
-  //-           svg.reviews__star.reviews__star--active
-  //-             use(xlink:href='/images/icons.svg#icon-star')
-  //-           svg.reviews__star.reviews__star--active
-  //-             use(xlink:href='/images/icons.svg#icon-star')
   section.section-reviews
     .reviews
       each review in bltour.reviews
