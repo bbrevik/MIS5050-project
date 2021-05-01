@@ -30,6 +30,27 @@ module.exports = {
     }
   },
 
+  manageAllReviews: async (req, res, next) => {
+    try {
+      let filter = {};
+      if (req.params.tourId) filter = { tour: req.params.tourId };
+
+      const reviewProperty = new APIProperties(Review.find(filter), req.query)
+        .filter()
+        .sort();
+
+      const reviews = await reviewProperty.bltQuery
+        .populate('tour')
+        .populate('user');
+
+      res.render('manageReviews', {
+        reviews,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+
   deleteReview: async (request, response, next) => {
     try {
       const item = await Review.findByIdAndDelete(request.params.id);

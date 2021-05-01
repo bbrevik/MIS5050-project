@@ -1,38 +1,21 @@
 extends layout
 
-append accountSettings
+mixin reviewSection(review)
+  .reviews__card
+    .reviews__avatar
+      img.reviews__avatar-img(src=`/images/users/${review.user.photo}`, alt='reviewer photo')
+      h6.reviews__user= review.user.name
+    h3.reviews__text2= review.tour.name
+    h3.reviews__text= review.reviewDate
+    p.reviews__text= review.review
+    .reviews__rating
+      each star in [1, 2, 3, 4, 5]
+        svg.reviews__star(class=`reviews__star--${review.rating >= star ? 'active' : 'inactive'}`)
+          use(xlink:href='/images/icons.svg#icon-star')
 
-      .user-view__content
-        .user-view__form-container
-          h2.heading-secondary.ma-bt-md Manage Reviews
+block content
 
-        //-   form.form.form-user-data(action='/submit-user-info' method='POST')
-        //-     .form__group
-        //-       label.form__label(for='name') Name
-        //-       input#name.form__input(type='text', value=`${user.name}`, required, name='name')
-        //-     .form__group.ma-bt-md
-        //-       label.form__label(for='email') Email address
-        //-       input#email.form__input(type='email', value=`${user.email}`, required, name='email')
-        //-     .form__group.form__photo-upload
-        //-       img.form__user-photo(src=`/images/users/${user.photo}`, alt='User photo')
-        //-       input.form__upload(type='file', accept='image/*', id='photo', name='photo')
-        //-       label(for='photo') Choose new photo              
-        //-     .form__group.right
-        //-       button.btn.btn--small.btn--green Save settings
-              
-        //- .line &nbsp;
-        
-        //- .user-view__form-container
-        //-   h2.heading-secondary.ma-bt-md Password change
-        //-   form.form.form-user-password
-        //-     .form__group
-        //-       label.form__label(for='password-current') Current password
-        //-       input#password-current.form__input(type='password', placeholder='••••••••', required, minlength='8')
-        //-     .form__group
-        //-       label.form__label(for='password') New password
-        //-       input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
-        //-     .form__group.ma-bt-lg
-        //-       label.form__label(for='password-confirm') Confirm password
-        //-       input#password-confirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
-        //-     .form__group.right
-        //-       button.btn.btn--small.btn--green.btn--save-password Save password
+  section.section-reviews-page
+    .reviewsManage
+      each review in reviews
+        +reviewSection(review)

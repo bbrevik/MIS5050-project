@@ -608,6 +608,18 @@ body {
   -ms-scroll-snap-type: x mandatory;
   scroll-snap-type: x mandatory;
 }
+
+.reviewsManage {
+  justify-content: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  max-width: 120rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 7rem;
+}
+
 .reviews__card {
   width: 30rem;
   padding: 4rem;
@@ -656,6 +668,12 @@ body {
   margin-bottom: 2rem;
   font-style: italic;
   font-weight: 400;
+}
+.reviews__text2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+
+  font-weight: 600;
 }
 .reviews__rating {
   margin-top: auto;

@@ -12,7 +12,7 @@ router.use(authenticateUser.authCheck); // make sure the user is authenticated
 
 router
   .route('/manage-reviews')
-  .get(reviewController.getAllReviews)
+  .get(reviewController.manageAllReviews)
   .post(
     authenticateUser.validateIsAdmin('user'),
     reviewController.createReview
