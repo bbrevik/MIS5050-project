@@ -2,6 +2,7 @@ const multer = require('multer');
 const BLTour = require('../models/tourModel');
 const User = require('../models/userModel');
 
+// this function is for the storage. we set the storage location and what we want the file name to be
 const ms = multer.diskStorage({
   destination: (req, file, fn) => {
     console.log('Storage');
@@ -14,6 +15,7 @@ const ms = multer.diskStorage({
   },
 });
 
+// this will check if the file being uploaded is an image and not another file type like csv or .txt file
 const mf = (req, file, fn) => {
   // if the file being passes if a image pass true
   if (file.mimetype.startsWith('image')) {
@@ -23,13 +25,15 @@ const mf = (req, file, fn) => {
   }
 };
 
-// multer upload destination
+// multer upload function calls the multer storage and  the file filter functions above.
 const uploadImage = multer({
   storage: ms,
   fileFilter: mf,
 });
 
+// this is what we call from the router and then this function calls the above function which gets the storage and file filter.
 exports.uploadImage = uploadImage.single('photo');
+
 exports.loginPage = (req, res, next) => {
   res.render('login');
 };
