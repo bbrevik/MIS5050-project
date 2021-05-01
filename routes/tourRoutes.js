@@ -12,6 +12,7 @@ const tourController = require('../controllers/tourController');
 const authenticateUser = require('../controllers/authenticateUser');
 // eslint-disable-next-line no-unused-vars
 const reviewController = require('../controllers/reviewController');
+// const homeController = require('../controllers/homeController');
 const reviewRouter = require('./reviewRoutes');
 
 // console.log('at tourId/review'); Mounting a path from the tour routes to the review router
@@ -28,11 +29,11 @@ router.use('/:tourId/reviews', reviewRouter);
 router.route('/tour-stats').get(tourController.getBucketListStats);
 router
   .route('/top-three')
-  .get(tourController.bltTopTours, tourController.getAllBLTours);
+  .get(tourController.bltTopTours, tourController.getThreeBLTours);
 
 router
   .route('/cheap-five')
-  .get(tourController.bltCheapTours, tourController.getAllBLTours);
+  .get(tourController.bltCheapTours, tourController.getCheapFiveTours);
 
 router
   .route('/distances/:userLocation/unit/:unit')

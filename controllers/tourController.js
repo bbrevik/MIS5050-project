@@ -62,6 +62,45 @@ exports.getAllBLTours = async (request, response, next) => {
   }
 };
 
+exports.getThreeBLTours = async (request, response, next) => {
+  try {
+    // Going to create a new object using mongooses building queries and then return in from the api properties class
+
+    const bltProperty = new APIProperties(BLTour.find(), request.query)
+      .filter()
+      .sort()
+
+      .paginate();
+
+    // allBLTours will wait until the property is built then pass it to the variable allBLTours
+    const tours = await bltProperty.bltQuery.populate('guides');
+    response.render('top-three', {
+      tours,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getCheapFiveTours = async (request, response, next) => {
+  try {
+    // Going to create a new object using mongooses building queries and then return in from the api properties class
+
+    const bltProperty = new APIProperties(BLTour.find(), request.query)
+      .filter()
+      .sort()
+      .paginate();
+
+    // allBLTours will wait until the property is built then pass it to the variable allBLTours
+    const tours = await bltProperty.bltQuery.populate('guides');
+    response.render('top-three', {
+      tours,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // https://docs.mongodb.com/manual/reference/operator/query/geoWithin/
 // this will find documents within a specific distance using geolocation
 exports.getWithinDist = async (req, res, next) => {
@@ -89,6 +128,19 @@ exports.getWithinDist = async (req, res, next) => {
       data: {
         data: tours,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.overviewTopThree = async (req, res, next) => {
+  try {
+    // get the data
+    const bltours = await BLTour.find();
+    res.render('top-three', {
+      title: 'All Tours',
+      tours: bltours,
     });
   } catch (error) {
     next(error);
