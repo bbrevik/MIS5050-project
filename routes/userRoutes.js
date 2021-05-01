@@ -28,9 +28,6 @@ router.use(userController.getUser);
 router.use(authenticateUser.authCheck);
 
 router.patch('/updatePassword', authenticateUser.updateUserPassword);
-router.get('/me', userController.getUser, userController.getOneUser);
-router.patch('/updateMe', userController.updateUser);
-router.delete('/deleteMe', userController.deleteUser);
 
 router.use(authenticateUser.validateIsAdmin('admin'));
 

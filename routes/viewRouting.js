@@ -11,6 +11,8 @@ const authenticateUser = require('../controllers/authenticateUser');
 
 const router = express.Router();
 
+// eslint-disable-next-line import/order
+
 const homeController = require('../controllers/homeController');
 // const tourController = require('../controllers/tourController');
 
@@ -40,6 +42,9 @@ router.get(
 router.post(
   '/submit-user-info',
   authenticateUser.authCheck,
+  homeController.uploadImage,
   homeController.updateUserInfo
+
+  // homeController.updateUserInfo
 );
 module.exports = router;
