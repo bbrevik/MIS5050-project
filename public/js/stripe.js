@@ -1,0 +1,1 @@
+//add strip informaiton here
